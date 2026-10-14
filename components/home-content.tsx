@@ -1,4 +1,3 @@
-
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -23,6 +22,45 @@ type Article = {
   }
 }
 
+function SocialIcon({
+  type,
+}: {
+  type: 'whatsapp' | 'email' | 'instagram' | 'x'
+}) {
+  if (type === 'whatsapp') {
+    return (
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+        <path d="M20.52 3.48A11.87 11.87 0 0 0 12.07 0C5.5 0 .15 5.35.15 11.93c0 2.1.55 4.16 1.6 5.98L.05 24l6.25-1.64a11.9 11.9 0 0 0 5.76 1.47h.01C18.65 23.83 24 18.48 24 11.91a11.84 11.84 0 0 0-3.48-8.43ZM12.07 21.8a9.9 9.9 0 0 1-5.05-1.39l-.36-.21-3.71.97.99-3.62-.24-.37a9.88 9.88 0 1 1 8.37 4.62Zm5.42-7.4c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.61-.92-2.2-.24-.57-.49-.49-.67-.5h-.57c-.2 0-.52.08-.8.38-.27.3-1.04 1.01-1.04 2.47s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.75-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" />
+      </svg>
+    )
+  }
+
+  if (type === 'email') {
+    return (
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m4 7 8 6 8-6" />
+      </svg>
+    )
+  }
+
+  if (type === 'instagram') {
+    return (
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+      <path d="M18.9 2H22l-6.78 7.75L23.2 22h-6.25l-4.9-7.4L5.57 22H2.43l7.25-8.29L1.8 2h6.4l4.43 6.77L18.9 2Zm-1.1 18h1.73L7.27 3.88H5.42L17.8 20Z" />
+    </svg>
+  )
+}
+
 export async function HomeContent() {
   let essays: Article[] = []
 
@@ -45,9 +83,7 @@ export async function HomeContent() {
         {/* HERO */}
         <section className="hero section-pad">
           <div className="hero-kicker">
-            <span className="eyebrow">
-              Writer · Scholar · Observer
-            </span>
+            <span className="eyebrow">Writer · Scholar · Observer</span>
             <span className="hero-index">AN ONGOING JOURNAL</span>
           </div>
 
@@ -64,7 +100,7 @@ export async function HomeContent() {
 
             <p className="hero-intro">
               Essays, observations and ideas at the intersection of
-              literature, science, culture and the everyday. A personal
+              literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
 
@@ -81,10 +117,10 @@ export async function HomeContent() {
           </div>
         </section>
 
-        {/* FEATURED WRITING */}
+        {/* FEATURED ARTICLE */}
         <section id="work" className="feature section-pad">
           <div className="section-heading">
-            <span className="eyebrow">A note from the journal</span>
+            <span className="eyebrow">Featured writing</span>
             <span className="rule" />
           </div>
 
@@ -93,9 +129,7 @@ export async function HomeContent() {
               {featuredArticle?.image?.asset?.url ? (
                 <img
                   src={featuredArticle.image.asset.url}
-                  alt={
-                    featuredArticle.image.alt || featuredArticle.title
-                  }
+                  alt={featuredArticle.image.alt || featuredArticle.title}
                 />
               ) : (
                 <img
@@ -111,32 +145,32 @@ export async function HomeContent() {
 
             <div className="feature-copy">
               <span className="eyebrow">
-                {featuredArticle ? 'Latest writing' : 'The journal'}
+                {featuredArticle
+                  ? featuredArticle.category || 'Latest journal entry'
+                  : 'The literary journal'}
               </span>
 
               <h2>
-                Words for
-                <br />
-                the <em>in-between.</em>
+                {featuredArticle?.title || (
+                  <>
+                    Words for
+                    <br />
+                    the <em>in-between.</em>
+                  </>
+                )}
               </h2>
 
               <p>
-                A space for the questions that stay with us, the details
-                we almost overlook, and the ideas that deserve more than
-                a passing glance.
+                {featuredArticle?.excerpt ||
+                  'A space for the questions that stay with us, the details we almost overlook, and the ideas that deserve more than a passing glance.'}
               </p>
 
-              {featuredArticle ? (
+              {featuredArticle && (
                 <Link
                   className="text-link"
                   href={`/articles/${featuredArticle.slug.current}`}
                 >
-                  Read the latest: {featuredArticle.title}
-                  <ArrowUpRight size={16} />
-                </Link>
-              ) : (
-                <Link className="text-link" href="/#essays">
-                  Discover the journal <ArrowUpRight size={16} />
+                  Read featured article <ArrowUpRight size={16} />
                 </Link>
               )}
             </div>
@@ -166,9 +200,9 @@ export async function HomeContent() {
             </span>
           </div>
 
-          {articles.length > 0 ? (
+          {otherArticles.length > 0 ? (
             <div className="essay-list">
-              {articles.map((article, index) => (
+              {otherArticles.map((article, index) => (
                 <article className="essay-card" key={article._id}>
                   <div className="essay-meta">
                     <span>{String(index + 1).padStart(2, '0')}</span>
@@ -213,30 +247,32 @@ export async function HomeContent() {
           ) : (
             <div style={{ padding: '28px 0', maxWidth: 520 }}>
               <p>
-                Every journal begins with a first page. New writing will
-                appear here once an article is published in the studio.
+                {articles.length === 1
+                  ? 'The latest article is featured above. More writing will appear here as you publish.'
+                  : 'Every journal begins with a first page. New writing will appear here once an article is published in the studio.'}
               </p>
-              <Link className="text-link" href="/studio">
-                Open the writing studio <ArrowUpRight size={16} />
-              </Link>
+
+              {articles.length === 0 && (
+                <Link className="text-link" href="/studio">
+                  Open the writing studio <ArrowUpRight size={16} />
+                </Link>
+              )}
             </div>
           )}
         </section>
 
-        {/* PERSONAL PHILOSOPHY */}
+        {/* QUOTATION */}
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
-
           <blockquote>
             The world reveals itself
             <br />
             to those who <em>notice.</em>
           </blockquote>
-
           <p>A thought to return to.</p>
         </section>
 
-        {/* ABOUT THE AUTHOR */}
+        {/* ABOUT */}
         <section id="about" className="about section-pad">
           <div className="section-heading">
             <span className="eyebrow">The person behind the pages</span>
@@ -276,7 +312,9 @@ export async function HomeContent() {
 
         {/* CONTACT */}
         <section id="contact" className="contact section-pad">
-          <span className="eyebrow">Correspondence · Open to conversation</span>
+          <span className="eyebrow">
+            Correspondence · Open to conversation
+          </span>
 
           <h2>
             Have a thought
@@ -296,14 +334,18 @@ export async function HomeContent() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              WhatsApp <ArrowUpRight size={17} />
+              <SocialIcon type="whatsapp" />
+              <span>WhatsApp</span>
+              <ArrowUpRight size={17} />
             </a>
 
             <a
               className="contact-button email-button"
               href="mailto:myselfasadfrost@gmail.com"
             >
-              Email me <ArrowUpRight size={17} />
+              <SocialIcon type="email" />
+              <span>Email me</span>
+              <ArrowUpRight size={17} />
             </a>
 
             <a
@@ -312,7 +354,20 @@ export async function HomeContent() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Instagram <ArrowUpRight size={17} />
+              <SocialIcon type="instagram" />
+              <span>Instagram</span>
+              <ArrowUpRight size={17} />
+            </a>
+
+            <a
+              className="contact-button twitter-button"
+              href="https://x.com/AsadFrost"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialIcon type="x" />
+              <span>Twitter / X</span>
+              <ArrowUpRight size={17} />
             </a>
           </div>
 
@@ -330,4 +385,4 @@ export async function HomeContent() {
       </div>
     </>
   )
-}
+                  }
