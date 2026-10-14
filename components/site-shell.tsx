@@ -3,9 +3,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
-import { ReadingProgress } from './reading-progress'
 import { PremiumEffects } from './premium-effects'
 
 const nav = [
@@ -15,7 +14,46 @@ const nav = [
   ['Contact', '/#contact'],
 ]
 
-export function SiteShell({ children }: { children: React.ReactNode }) {
+function ReadingProgress() {
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const total =
+        document.documentElement.scrollHeight - window.innerHeight
+
+      setProgress(
+        total > 0
+          ? Math.min(100, Math.max(0, (window.scrollY / total) * 100))
+          : 0
+      )
+    }
+
+    updateProgress()
+    window.addEventListener('scroll', updateProgress, { passive: true })
+    window.addEventListener('resize', updateProgress)
+
+    return () => {
+      window.removeEventListener('scroll', updateProgress)
+      window.removeEventListener('resize', updateProgress)
+    }
+  }, [])
+
+  return (
+    <div className="reading-progress-track" aria-hidden="true">
+      <div
+        className="reading-progress-bar"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  )
+}
+
+export function SiteShell({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [open, setOpen] = useState(false)
 
   return (
