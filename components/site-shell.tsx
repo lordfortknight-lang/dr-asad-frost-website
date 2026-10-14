@@ -5,6 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ReadingProgress } from './reading-progress'
+import { PremiumEffects } from './premium-effects'
 
 const nav = [
   ['Work', '/#work'],
@@ -13,11 +15,18 @@ const nav = [
   ['Contact', '/#contact'],
 ]
 
-export function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteShell({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [open, setOpen] = useState(false)
 
   return (
     <div className="site-shell">
+      <ReadingProgress />
+      <PremiumEffects />
+
       <header className="site-header site-header-branded">
         <Link
           href="/"
@@ -40,7 +49,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           className="menu-toggle"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen((current) => !current)}
         >
           {open ? <X size={25} /> : <Menu size={25} />}
         </button>
@@ -76,7 +85,9 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <span className="footer-mark">AF</span>
           <p>Writer. Scholar. Dentist.</p>
         </div>
+
         <p>© {new Date().getFullYear()} Dr Asad Frost</p>
+
         <p>Made for the margins.</p>
       </footer>
     </div>
