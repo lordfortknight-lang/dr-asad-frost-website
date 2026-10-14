@@ -398,3 +398,215 @@ button:focus-visible {
     max-height: 68px;
   }
 }
+
+/* =========================================
+   DR ASAD FROST — PREMIUM MOTION SYSTEM
+   Cream · Burgundy · Gold
+   ========================================= */
+
+/* Keep animations smooth and consistent */
+.site-header.site-header-branded {
+  isolation: isolate;
+}
+
+.site-header.site-header-branded .brand-logo-link {
+  animation: brand-fade-in 1s ease-out both;
+  transform-origin: center;
+}
+
+.site-header.site-header-branded .brand-logo-image {
+  transition:
+    transform 500ms ease,
+    filter 500ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-header.site-header-branded .brand-logo-link:hover
+  .brand-logo-image {
+    transform: scale(1.025);
+    filter: drop-shadow(0 4px 10px rgba(130, 35, 57, 0.12));
+  }
+}
+
+/* Hero entrance */
+.hero .hero-kicker {
+  animation: rise-in 700ms 100ms ease-out both;
+}
+
+.hero .hero-copy > .eyebrow {
+  animation: rise-in 750ms 180ms ease-out both;
+}
+
+.hero .hero-copy h1 {
+  animation: rise-in 900ms 280ms ease-out both;
+}
+
+.hero .hero-intro {
+  animation: rise-in 800ms 420ms ease-out both;
+}
+
+.hero .text-link {
+  animation: rise-in 750ms 520ms ease-out both;
+}
+
+.hero .hero-bottom {
+  animation: rise-in 850ms 650ms ease-out both;
+}
+
+/* Soft, slow gold light behind hero content */
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  width: min(72vw, 560px);
+  aspect-ratio: 1;
+  right: -18%;
+  top: 12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(190, 151, 83, 0.11) 0%,
+    rgba(190, 151, 83, 0.055) 34%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  animation: gold-breathe 12s ease-in-out infinite alternate;
+}
+
+/* Elegant interactive links and buttons */
+.text-link,
+.contact-button,
+.studio-link {
+  transition:
+    color 250ms ease,
+    background-color 250ms ease,
+    border-color 250ms ease,
+    transform 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.text-link {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .text-link:hover,
+  .studio-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .contact-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(83, 27, 41, 0.09);
+  }
+}
+
+.text-link:focus-visible,
+.contact-button:focus-visible,
+.studio-link:focus-visible,
+.brand-logo-link:focus-visible,
+.menu-toggle:focus-visible {
+  outline: 2px solid #b99a59;
+  outline-offset: 5px;
+}
+
+/* Progressive scroll reveal:
+   browsers without view-timeline keep normal visibility */
+@supports (animation-timeline: view()) {
+  .feature .section-heading,
+  .feature .feature-grid,
+  .essays .section-heading,
+  .essays .essay-list,
+  .essays > div:not(.section-heading),
+  .statement > *,
+  .about .section-heading,
+  .about .about-grid,
+  .contact > * {
+    animation: scroll-reveal both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 28%;
+  }
+}
+
+/* Motion keyframes */
+@keyframes brand-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gold-breathe {
+  from {
+    transform: translate3d(-3%, -1%, 0) scale(0.94);
+    opacity: 0.65;
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-reveal {
+  from {
+    opacity: 0.35;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smaller screens */
+@media (max-width: 600px) {
+  .hero::before {
+    width: 95vw;
+    right: -30%;
+    top: 16%;
+    filter: blur(18px);
+  }
+
+  .hero .hero-copy h1 {
+    animation-delay: 200ms;
+  }
+
+  .contact-button {
+    min-height: 48px;
+  }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
