@@ -15,11 +15,7 @@ const nav = [
   ['Contact', '/#contact'],
 ]
 
-export function SiteShell({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export function SiteShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -85,9 +81,7 @@ export function SiteShell({
           <span className="footer-mark">AF</span>
           <p>Writer. Scholar. Dentist.</p>
         </div>
-
         <p>© {new Date().getFullYear()} Dr Asad Frost</p>
-
         <p>Made for the margins.</p>
       </footer>
     </div>
