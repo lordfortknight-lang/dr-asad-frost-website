@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Dr Asad Frost — Writer. Scholar. Observer.',
+  description: 'The independent literary practice of Dr Asad Frost: essays, scholarship, books, and photographs.',
+  generator: 'Next.js',
   icons: {
     icon: [
       {
