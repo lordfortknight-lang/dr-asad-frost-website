@@ -81,7 +81,6 @@ export async function HomeContent() {
   return (
     <>
       <main className="site-shell">
-        {/* HERO */}
         <section className="hero section-pad">
           <div className="hero-kicker">
             <span className="hero-index">AN ONGOING JOURNAL</span>
@@ -104,9 +103,9 @@ export async function HomeContent() {
               archive by Dr Asad Frost.
             </p>
 
-            <Link className="text-link" href="/#essays">
+            <a className="text-link" href="#essays">
               Explore the journal <ArrowDown size={16} />
-            </Link>
+            </a>
           </div>
 
           <div className="hero-bottom">
@@ -117,7 +116,6 @@ export async function HomeContent() {
           </div>
         </section>
 
-        {/* FEATURED ARTICLE */}
         <section id="work" className="feature section-pad">
           <div className="section-heading">
             <span className="eyebrow">Featured writing</span>
@@ -139,7 +137,7 @@ export async function HomeContent() {
               )}
 
               <span className="image-caption">
-                Thoughts, notes & observations
+                Thoughts, notes &amp; observations
               </span>
             </div>
 
@@ -177,7 +175,6 @@ export async function HomeContent() {
           </div>
         </section>
 
-        {/* JOURNAL */}
         <section id="essays" className="essays section-pad">
           <div className="section-heading">
             <div>
@@ -195,9 +192,7 @@ export async function HomeContent() {
               </h2>
             </div>
 
-            <span className="eyebrow">
-              {articles.length} published
-            </span>
+            <span className="eyebrow">{articles.length} published</span>
           </div>
 
           {otherArticles.length > 0 ? (
@@ -261,7 +256,6 @@ export async function HomeContent() {
           )}
         </section>
 
-        {/* QUOTATION */}
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
           <blockquote>
@@ -272,7 +266,6 @@ export async function HomeContent() {
           <p>A thought to return to.</p>
         </section>
 
-        {/* ABOUT */}
         <section id="about" className="about section-pad">
           <div className="section-heading">
             <span className="eyebrow">The person behind the pages</span>
@@ -303,14 +296,13 @@ export async function HomeContent() {
                 questions.
               </p>
 
-              <Link className="text-link" href="/#essays">
+              <a className="text-link" href="#essays">
                 Explore my writing <ArrowUpRight size={16} />
-              </Link>
+              </a>
             </div>
           </div>
         </section>
 
-        {/* CONTACT */}
         <section id="contact" className="contact section-pad">
           <span className="eyebrow">
             Correspondence · Open to conversation
