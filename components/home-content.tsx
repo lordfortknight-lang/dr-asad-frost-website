@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -83,7 +84,9 @@ export async function HomeContent() {
         {/* HERO */}
         <section className="hero section-pad">
           <div className="hero-kicker">
-            <span className="eyebrow">Writer · Scholar · Observer</span>
+            <span className="eyebrow">
+              Dentist · Writer · Stock Market Enthusiast
+            </span>
             <span className="hero-index">AN ONGOING JOURNAL</span>
           </div>
 
@@ -385,4 +388,4 @@ export async function HomeContent() {
       </div>
     </>
   )
-                  }
+}
