@@ -18,30 +18,37 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="site-shell">
-      <header className="site-header">
+      <header className="site-header site-header-branded">
         <Link
           href="/"
-          className="wordmark"
+          className="brand-logo-link"
+          aria-label="Dr Asad Frost home"
           onClick={() => setOpen(false)}
-          aria-label="Dr Asad Frost — Home"
         >
           <Image
             src="/file_0000000074548208beb7e7894cc30a31.png"
-            alt="Dr Asad Frost logo"
-            width={52}
-            height={52}
+            alt="Dr Asad Frost — Dentist, Writer, Stock Market Enthusiast"
+            width={1800}
+            height={600}
             priority
-            style={{
-              width: 48,
-              height: 48,
-              objectFit: 'contain',
-              borderRadius: '50%',
-            }}
+            className="brand-logo-image"
           />
-          <span className="wordmark-name">Dr Asad Frost</span>
         </Link>
 
-        <nav className={`main-nav ${open ? 'is-open' : ''}`} aria-label="Main navigation">
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X size={25} /> : <Menu size={25} />}
+        </button>
+
+        <nav
+          className={`main-nav ${open ? 'is-open' : ''}`}
+          aria-label="Main navigation"
+        >
           {nav.map(([label, href]) => (
             <Link
               key={href}
@@ -60,16 +67,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             Get in touch <ArrowUpRight size={15} />
           </Link>
         </nav>
-
-        <button
-          type="button"
-          className="menu-toggle"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X size={23} /> : <Menu size={23} />}
-        </button>
       </header>
 
       {children}
