@@ -330,3 +330,71 @@ button:focus-visible {
     animation-duration: 0.01ms !important;
   }
   }
+
+/* Centered premium brand logo */
+.site-header.site-header-branded {
+  position: relative;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 76px;
+}
+
+.brand-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 620px);
+  margin: 0 auto;
+  text-decoration: none;
+  line-height: 0;
+}
+
+.brand-logo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 115px;
+  object-fit: contain;
+}
+
+.site-header.site-header-branded .menu-toggle {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+}
+
+@media (max-width: 600px) {
+  .site-header.site-header-branded {
+    min-height: 118px;
+    padding: 18px 58px 18px 16px;
+  }
+
+  .brand-logo-link {
+    width: 100%;
+    max-width: 390px;
+  }
+
+  .brand-logo-image {
+    max-height: 82px;
+  }
+
+  .site-header.site-header-branded .menu-toggle {
+    right: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-header.site-header-branded {
+    min-height: 100px;
+    padding-left: 10px;
+    padding-right: 50px;
+  }
+
+  .brand-logo-image {
+    max-height: 68px;
+  }
+}
