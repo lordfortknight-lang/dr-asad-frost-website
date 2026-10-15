@@ -6,7 +6,11 @@ import {
   BookOpen,
   Feather,
 } from 'lucide-react'
-import { sanityClient, contentQuery } from '@/lib/sanity'
+import {
+  sanityClient,
+  contentQuery,
+  achievementsQuery,
+} from '@/lib/sanity'
 
 type Article = {
   _id: string
@@ -17,6 +21,18 @@ type Article = {
   publishedAt?: string
   category?: string
   tags?: string[]
+  image?: {
+    asset?: { url?: string }
+    alt?: string
+  }
+}
+
+type Achievement = {
+  _id: string
+  title: string
+  institution?: string
+  year?: number | string
+  description?: string
   image?: {
     asset?: { url?: string }
     alt?: string
@@ -64,11 +80,18 @@ function SocialIcon({
 
 export async function HomeContent() {
   let essays: Article[] = []
+  let achievements: Achievement[] = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
   } catch (error) {
     console.error('Sanity content fetch failed:', error)
+  }
+
+  try {
+    achievements = await sanityClient.fetch(achievementsQuery)
+  } catch (error) {
+    console.error('Sanity achievements fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -88,6 +111,7 @@ export async function HomeContent() {
           <Link href="/#essays" className="hover:underline">Journal</Link>
           <Link href="/books" className="hover:underline">Books</Link>
           <Link href="/magazine" className="hover:underline">Magazine</Link>
+          <Link href="/#achievements" className="hover:underline">Achievements</Link>
           <Link href="/#about" className="hover:underline">About</Link>
           <Link href="/#contact" className="hover:underline">Contact</Link>
         </div>
@@ -262,6 +286,59 @@ export async function HomeContent() {
             </div>
           )}
         </section>
+
+        {achievements.length > 0 && (
+          <section id="achievements" className="essays section-pad">
+            <div className="section-heading">
+              <div>
+                <span className="eyebrow">Milestones & Recognition</span>
+                <h2
+                  style={{
+                    fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+                    lineHeight: 1,
+                    marginTop: 18,
+                  }}
+                >
+                  Work worth
+                  <br />
+                  <em>remembering.</em>
+                </h2>
+              </div>
+              <span className="eyebrow">
+                {achievements.length} achievements
+              </span>
+            </div>
+
+            <div className="essay-list">
+              {achievements.map((item, index) => (
+                <article className="essay-card" key={item._id}>
+                  <div className="essay-meta">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span>
+                      {item.year ? String(item.year) : 'Recognition'}
+                    </span>
+                  </div>
+
+                  {item.image?.asset?.url && (
+                    <div className="essay-photo">
+                      <img
+                        src={item.image.asset.url}
+                        alt={item.image.alt || item.title}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  <h3>{item.title}</h3>
+
+                  {item.institution && <p>{item.institution}</p>}
+
+                  {item.description && <p>{item.description}</p>}
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
