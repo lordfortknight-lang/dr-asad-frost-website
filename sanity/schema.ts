@@ -11,7 +11,7 @@ const slug = {
 
 const image = {
   name: 'image',
-  title: 'Image',
+  title: 'Image / Cover',
   type: 'image',
   options: { hotspot: true },
   fields: [
@@ -23,6 +23,13 @@ const image = {
       validation: (Rule: any) => Rule.required(),
     },
   ],
+}
+
+const pdfFile = {
+  name: 'pdf',
+  title: 'PDF file',
+  type: 'file',
+  options: { accept: 'application/pdf' },
 }
 
 const tags = {
@@ -65,7 +72,34 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       { name: 'year', type: 'number' },
       { name: 'description', type: 'text' },
       image,
+      pdfFile,
+      { name: 'isbn', type: 'string', title: 'ISBN (optional)' },
       tags,
+    ],
+  },
+  {
+    name: 'magazineIssue',
+    title: 'Magazine Issue',
+    type: 'document',
+    fields: [
+      { name: 'title', type: 'string', title: 'Issue title', validation: (Rule: any) => Rule.required() },
+      slug,
+      { name: 'issueNumber', type: 'string', title: 'Issue / Volume number' },
+      { name: 'publishedAt', type: 'date', title: 'Publication date' },
+      { name: 'description', type: 'text', title: 'Introduction / Description' },
+      image,
+      {
+        ...pdfFile,
+        validation: (Rule: any) => Rule.required(),
+      },
+      tags,
+    ],
+    orderings: [
+      {
+        title: 'Publication date, newest first',
+        name: 'publishedAtDesc',
+        by: [{ field: 'publishedAt', direction: 'desc' }],
+      },
     ],
   },
   {
