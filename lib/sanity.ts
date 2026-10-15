@@ -8,19 +8,32 @@ export const sanityClient = createClient({
   useCdn: true,
 });
 
-export const contentQuery = `*[_type == "article" && defined(slug.current)] | order(publishedAt desc) {
+export const contentQuery = `*[
+  _type in ["article", "achievement"] &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
   _id,
   _type,
   title,
   slug,
   excerpt,
+  description,
   publishedAt,
   category,
+  institution,
+  year,
   tags,
-  "image": image {
-    asset->{url},
-    alt
-  }
+  "image": coalesce(
+    image {
+      asset->{url},
+      alt
+    },
+    mainImage {
+      asset->{url},
+      alt
+    }
+  )
 }`;
 
 export const booksQuery = `*[_type == "book"] | order(title asc) {
