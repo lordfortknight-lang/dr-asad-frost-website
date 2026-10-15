@@ -1,4 +1,3 @@
-
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -114,6 +113,24 @@ export async function HomeContent() {
   return (
     <>
       <style>{`
+        .publication-nav {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 28px;
+          padding: 18px 24px;
+          background: #f7f1e7;
+          border-bottom: 1px solid #e3d4c1;
+        }
+
+        .publication-nav a {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          text-decoration: none;
+        }
+
         .achievement-list {
           display: grid;
           gap: 36px;
@@ -169,6 +186,11 @@ export async function HomeContent() {
         }
 
         @media (max-width: 700px) {
+          .publication-nav {
+            gap: 22px;
+            padding: 16px;
+          }
+
           .achievement-list {
             gap: 34px;
           }
@@ -196,6 +218,16 @@ export async function HomeContent() {
           }
         }
       `}</style>
+
+      <nav className="publication-nav" aria-label="Publications">
+        <Link className="text-link" href="/books">
+          <BookOpen size={17} /> Books
+        </Link>
+
+        <Link className="text-link" href="/magazine">
+          <Feather size={17} /> Magazine
+        </Link>
+      </nav>
 
       <main className="site-shell">
         <section className="hero section-pad">
