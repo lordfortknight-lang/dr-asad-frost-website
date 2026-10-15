@@ -1,3 +1,4 @@
+
 import { createClient } from '@sanity/client'
 
 export const sanityConfigured = Boolean(
@@ -14,13 +15,18 @@ export const sanityClient = createClient({
 })
 
 export const contentQuery = `*[
-  _type in ["article", "book", "photograph", "achievement"] &&
+  _type in ["article", "book", "photograph", "achievement", "magazineIssue"] &&
   defined(slug.current)
 ] | order(publishedAt desc) {
   _id,
   _type,
   title,
   slug,
+  subtitle,
+  publisher,
+  year,
+  issueNumber,
+  description,
   excerpt,
   publishedAt,
   category,
@@ -29,7 +35,122 @@ export const contentQuery = `*[
     "asset": asset->{
       url
     },
-    alt
+    alt,
+    caption
+  },
+  "pdf": pdf.asset->{
+    url,
+    originalFilename,
+    size,
+    mimeType
   },
   body
+}`
+
+export const booksQuery = `*[
+  _type == "book" &&
+  defined(title) &&
+  defined(slug.current)
+] | order(year desc, title asc) {
+  _id,
+  title,
+  slug,
+  subtitle,
+  publisher,
+  year,
+  description,
+  tags,
+  "image": image {
+    "asset": asset->{
+      url
+    },
+    alt,
+    caption
+  },
+  "pdf": pdf.asset->{
+    url,
+    originalFilename,
+    size,
+    mimeType
+  }
+}`
+
+export const magazinesQuery = `*[
+  _type == "magazineIssue" &&
+  defined(title) &&
+  defined(slug.current)
+] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  issueNumber,
+  publishedAt,
+  description,
+  tags,
+  "image": image {
+    "asset": asset->{
+      url
+    },
+    alt,
+    caption
+  },
+  "pdf": pdf.asset->{
+    url,
+    originalFilename,
+    size,
+    mimeType
+  }
+}`
+
+export const bookBySlugQuery = `*[
+  _type == "book" &&
+  slug.current == $slug
+][0] {
+  _id,
+  title,
+  slug,
+  subtitle,
+  publisher,
+  year,
+  description,
+  tags,
+  "image": image {
+    "asset": asset->{
+      url
+    },
+    alt,
+    caption
+  },
+  "pdf": pdf.asset->{
+    url,
+    originalFilename,
+    size,
+    mimeType
+  }
+}`
+
+export const magazineBySlugQuery = `*[
+  _type == "magazineIssue" &&
+  slug.current == $slug
+][0] {
+  _id,
+  title,
+  slug,
+  issueNumber,
+  publishedAt,
+  description,
+  tags,
+  "image": image {
+    "asset": asset->{
+      url
+    },
+    alt,
+    caption
+  },
+  "pdf": pdf.asset->{
+    url,
+    originalFilename,
+    size,
+    mimeType
+  }
 }`
