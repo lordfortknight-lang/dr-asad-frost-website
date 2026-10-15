@@ -23,6 +23,32 @@ type Article = {
   }
 }
 
+type Achievement = {
+  _id: string
+  title: string
+  institution?: string
+  year?: number
+  description?: string
+  image?: {
+    asset?: { url?: string }
+    alt?: string
+    caption?: string
+  }
+}
+
+const achievementsQuery = `*[_type == "achievement" && defined(title)] | order(year desc) {
+  _id,
+  title,
+  institution,
+  year,
+  description,
+  "image": image {
+    "asset": asset->{url},
+    alt,
+    caption
+  }
+}`
+
 function SocialIcon({
   type,
 }: {
@@ -64,11 +90,18 @@ function SocialIcon({
 
 export async function HomeContent() {
   let essays: Article[] = []
+  let achievements: Achievement[] = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
   } catch (error) {
     console.error('Sanity content fetch failed:', error)
+  }
+
+  try {
+    achievements = await sanityClient.fetch(achievementsQuery)
+  } catch (error) {
+    console.error('Sanity achievements fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -255,6 +288,66 @@ export async function HomeContent() {
             </div>
           )}
         </section>
+
+        {achievements.length > 0 && (
+          <section id="achievements" className="essays section-pad">
+            <div className="section-heading">
+              <div>
+                <span className="eyebrow">Milestones &amp; recognition</span>
+                <h2
+                  style={{
+                    fontSize: 'clamp(2.7rem, 6vw, 5.5rem)',
+                    lineHeight: 0.95,
+                    margin: '18px 0 0',
+                  }}
+                >
+                  Work worth
+                  <br />
+                  <em>celebrating.</em>
+                </h2>
+              </div>
+            </div>
+
+            {achievements.map((achievement) => (
+              <article
+                key={achievement._id}
+                className="feature-grid"
+                style={{ marginTop: 36, marginBottom: 48 }}
+              >
+                {achievement.image?.asset?.url && (
+                  <div className="feature-image">
+                    <img
+                      src={achievement.image.asset.url}
+                      alt={achievement.image.alt || achievement.title}
+                      loading="lazy"
+                    />
+                    {achievement.image.caption && (
+                      <span className="image-caption">
+                        {achievement.image.caption}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <div className="feature-copy">
+                  <span className="eyebrow">
+                    {achievement.year || 'Achievement'}
+                  </span>
+
+                  <h2>{achievement.title}</h2>
+
+                  {achievement.institution && (
+                    <p>{achievement.institution}</p>
+                  )}
+
+                  {achievement.description && (
+                    <p>{achievement.description}</p>
+                  )}
+                </div>
+              </article>
+            ))}
+          </section>
+        )}
 
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
