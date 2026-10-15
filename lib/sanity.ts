@@ -8,14 +8,18 @@ export const sanityClient = createClient({
   useCdn: true,
 });
 
-export const contentQuery = `*[_type == "article"] | order(publishedAt desc) {
+export const contentQuery = `*[_type == "article" && defined(slug.current)] | order(publishedAt desc) {
   _id,
+  _type,
   title,
   slug,
   excerpt,
   publishedAt,
-  mainImage {
-    asset->{url}
+  category,
+  tags,
+  "image": image {
+    asset->{url},
+    alt
   }
 }`;
 
