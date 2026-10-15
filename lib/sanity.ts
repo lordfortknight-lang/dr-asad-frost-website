@@ -95,3 +95,19 @@ export const magazineBySlugQuery = `*[_type == "magazineIssue" && slug.current =
     asset->{url, originalFilename, size, mimeType}
   }
 }`;
+
+export const achievementsQuery = `*[
+  _type == "achievement" &&
+  !(_id in path("drafts.**"))
+] | order(year desc, _createdAt desc) {
+  _id,
+  _type,
+  title,
+  institution,
+  year,
+  description,
+  "image": image {
+    asset->{url},
+    alt
+  }
+}`;
