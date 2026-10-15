@@ -113,6 +113,90 @@ export async function HomeContent() {
 
   return (
     <>
+      <style>{`
+        .achievement-list {
+          display: grid;
+          gap: 36px;
+        }
+
+        .achievement-card {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+          align-items: center;
+          gap: clamp(20px, 5vw, 64px);
+          min-width: 0;
+        }
+
+        .achievement-photo {
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .achievement-photo img {
+          display: block;
+          width: 100%;
+          height: auto;
+          max-height: 390px;
+          aspect-ratio: 4 / 3;
+          object-fit: contain;
+          object-position: center;
+          border-radius: 2px;
+        }
+
+        .achievement-copy {
+          min-width: 0;
+        }
+
+        .achievement-copy h2 {
+          color: var(--cream);
+          font-size: clamp(2rem, 4.5vw, 4rem);
+          line-height: 1.05;
+          letter-spacing: -0.045em;
+          overflow-wrap: anywhere;
+          margin: 14px 0;
+        }
+
+        .achievement-copy p {
+          color: #eadbd4;
+          font-size: 14px;
+          line-height: 1.75;
+          overflow-wrap: anywhere;
+          margin: 8px 0;
+        }
+
+        .achievement-copy .eyebrow {
+          color: var(--gold);
+        }
+
+        @media (max-width: 700px) {
+          .achievement-list {
+            gap: 34px;
+          }
+
+          .achievement-card {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 18px;
+          }
+
+          .achievement-photo img {
+            max-height: 300px;
+            aspect-ratio: 4 / 3;
+          }
+
+          .achievement-copy h2 {
+            font-size: clamp(2rem, 9vw, 3rem);
+            line-height: 1.08;
+            margin: 12px 0;
+          }
+
+          .achievement-copy p {
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 8px 0;
+          }
+        }
+      `}</style>
+
       <main className="site-shell">
         <section className="hero section-pad">
           <div className="hero-kicker">
@@ -308,44 +392,40 @@ export async function HomeContent() {
               </div>
             </div>
 
-            {achievements.map((achievement) => (
-              <article
-                key={achievement._id}
-                className="feature-grid"
-                style={{ marginTop: 36, marginBottom: 48 }}
-              >
-                {achievement.image?.asset?.url && (
-                  <div className="feature-image">
-                    <img
-                      src={achievement.image.asset.url}
-                      alt={achievement.image.alt || achievement.title}
-                      loading="lazy"
-                    />
-                    {achievement.image.caption && (
-                      <span className="image-caption">
-                        {achievement.image.caption}
-                      </span>
+            <div className="achievement-list">
+              {achievements.map((achievement) => (
+                <article
+                  key={achievement._id}
+                  className="achievement-card"
+                >
+                  {achievement.image?.asset?.url && (
+                    <div className="achievement-photo">
+                      <img
+                        src={achievement.image.asset.url}
+                        alt={achievement.image.alt || achievement.title}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  <div className="achievement-copy">
+                    <span className="eyebrow">
+                      {achievement.year || 'Achievement'}
+                    </span>
+
+                    <h2>{achievement.title}</h2>
+
+                    {achievement.institution && (
+                      <p>{achievement.institution}</p>
+                    )}
+
+                    {achievement.description && (
+                      <p>{achievement.description}</p>
                     )}
                   </div>
-                )}
-
-                <div className="feature-copy">
-                  <span className="eyebrow">
-                    {achievement.year || 'Achievement'}
-                  </span>
-
-                  <h2>{achievement.title}</h2>
-
-                  {achievement.institution && (
-                    <p>{achievement.institution}</p>
-                  )}
-
-                  {achievement.description && (
-                    <p>{achievement.description}</p>
-                  )}
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
           </section>
         )}
 
