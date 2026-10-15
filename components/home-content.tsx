@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -21,32 +22,6 @@ type Article = {
     alt?: string
   }
 }
-
-type Achievement = {
-  _id: string
-  title: string
-  institution?: string
-  year?: number
-  description?: string
-  image?: {
-    asset?: { url?: string }
-    alt?: string
-    caption?: string
-  }
-}
-
-const achievementsQuery = `*[_type == "achievement" && defined(title)] | order(year desc) {
-  _id,
-  title,
-  institution,
-  year,
-  description,
-  "image": image {
-    "asset": asset->{url},
-    alt,
-    caption
-  }
-}`
 
 function SocialIcon({
   type,
@@ -89,18 +64,11 @@ function SocialIcon({
 
 export async function HomeContent() {
   let essays: Article[] = []
-  let achievements: Achievement[] = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
   } catch (error) {
     console.error('Sanity content fetch failed:', error)
-  }
-
-  try {
-    achievements = await sanityClient.fetch(achievementsQuery)
-  } catch (error) {
-    console.error('Sanity achievements fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -112,121 +80,17 @@ export async function HomeContent() {
 
   return (
     <>
-      <style>{`
-        .publication-nav {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 28px;
-          padding: 18px 24px;
-          background: #f7f1e7;
-          border-bottom: 1px solid #e3d4c1;
-        }
-
-        .publication-nav a {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          text-decoration: none;
-        }
-
-        .achievement-list {
-          display: grid;
-          gap: 36px;
-        }
-
-        .achievement-card {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-          align-items: center;
-          gap: clamp(20px, 5vw, 64px);
-          min-width: 0;
-        }
-
-        .achievement-photo {
-          min-width: 0;
-          overflow: hidden;
-        }
-
-        .achievement-photo img {
-          display: block;
-          width: 100%;
-          height: auto;
-          max-height: 390px;
-          aspect-ratio: 4 / 3;
-          object-fit: contain;
-          object-position: center;
-          border-radius: 2px;
-        }
-
-        .achievement-copy {
-          min-width: 0;
-        }
-
-        .achievement-copy h2 {
-          color: var(--cream);
-          font-size: clamp(2rem, 4.5vw, 4rem);
-          line-height: 1.05;
-          letter-spacing: -0.045em;
-          overflow-wrap: anywhere;
-          margin: 14px 0;
-        }
-
-        .achievement-copy p {
-          color: #eadbd4;
-          font-size: 14px;
-          line-height: 1.75;
-          overflow-wrap: anywhere;
-          margin: 8px 0;
-        }
-
-        .achievement-copy .eyebrow {
-          color: var(--gold);
-        }
-
-        @media (max-width: 700px) {
-          .publication-nav {
-            gap: 22px;
-            padding: 16px;
-          }
-
-          .achievement-list {
-            gap: 34px;
-          }
-
-          .achievement-card {
-            grid-template-columns: minmax(0, 1fr);
-            gap: 18px;
-          }
-
-          .achievement-photo img {
-            max-height: 300px;
-            aspect-ratio: 4 / 3;
-          }
-
-          .achievement-copy h2 {
-            font-size: clamp(2rem, 9vw, 3rem);
-            line-height: 1.08;
-            margin: 12px 0;
-          }
-
-          .achievement-copy p {
-            font-size: 14px;
-            line-height: 1.7;
-            margin: 8px 0;
-          }
-        }
-      `}</style>
-
-      <nav className="publication-nav" aria-label="Publications">
-        <Link className="text-link" href="/books">
-          <BookOpen size={17} /> Books
+      <nav className="section-pad flex flex-wrap items-center justify-between gap-4 border-b border-[#e6d9c9] py-4">
+        <Link href="/" className="font-serif text-lg font-semibold">
+          Dr Asad Frost
         </Link>
-
-        <Link className="text-link" href="/magazine">
-          <Feather size={17} /> Magazine
-        </Link>
+        <div className="flex flex-wrap items-center gap-5 text-sm">
+          <Link href="/#essays" className="hover:underline">Journal</Link>
+          <Link href="/books" className="hover:underline">Books</Link>
+          <Link href="/magazine" className="hover:underline">Magazine</Link>
+          <Link href="/#about" className="hover:underline">About</Link>
+          <Link href="/#contact" className="hover:underline">Contact</Link>
+        </div>
       </nav>
 
       <main className="site-shell">
@@ -239,22 +103,19 @@ export async function HomeContent() {
             <p className="eyebrow" style={{ marginBottom: 24 }}>
               Welcome to my corner of the world
             </p>
-
             <h1>
               A life of
               <br />
               <em>paying</em> attention.
             </h1>
-
             <p className="hero-intro">
               Essays, observations and ideas at the intersection of
               literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
-
-            <a className="text-link" href="#essays">
+            <Link className="text-link" href="/#essays">
               Explore the journal <ArrowDown size={16} />
-            </a>
+            </Link>
           </div>
 
           <div className="hero-bottom">
@@ -284,9 +145,8 @@ export async function HomeContent() {
                   alt="An open notebook and pen on a writing desk"
                 />
               )}
-
               <span className="image-caption">
-                Thoughts, notes &amp; observations
+                Thoughts, notes & observations
               </span>
             </div>
 
@@ -340,7 +200,6 @@ export async function HomeContent() {
                 <em>sitting with.</em>
               </h2>
             </div>
-
             <span className="eyebrow">{articles.length} published</span>
           </div>
 
@@ -395,7 +254,6 @@ export async function HomeContent() {
                   ? 'The latest article is featured above. More writing will appear here as you publish.'
                   : 'Every journal begins with a first page. New writing will appear here once an article is published in the studio.'}
               </p>
-
               {articles.length === 0 && (
                 <Link className="text-link" href="/studio">
                   Open the writing studio <ArrowUpRight size={16} />
@@ -404,62 +262,6 @@ export async function HomeContent() {
             </div>
           )}
         </section>
-
-        {achievements.length > 0 && (
-          <section id="achievements" className="essays section-pad">
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">Milestones &amp; recognition</span>
-                <h2
-                  style={{
-                    fontSize: 'clamp(2.7rem, 6vw, 5.5rem)',
-                    lineHeight: 0.95,
-                    margin: '18px 0 0',
-                  }}
-                >
-                  Work worth
-                  <br />
-                  <em>celebrating.</em>
-                </h2>
-              </div>
-            </div>
-
-            <div className="achievement-list">
-              {achievements.map((achievement) => (
-                <article
-                  key={achievement._id}
-                  className="achievement-card"
-                >
-                  {achievement.image?.asset?.url && (
-                    <div className="achievement-photo">
-                      <img
-                        src={achievement.image.asset.url}
-                        alt={achievement.image.alt || achievement.title}
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-
-                  <div className="achievement-copy">
-                    <span className="eyebrow">
-                      {achievement.year || 'Achievement'}
-                    </span>
-
-                    <h2>{achievement.title}</h2>
-
-                    {achievement.institution && (
-                      <p>{achievement.institution}</p>
-                    )}
-
-                    {achievement.description && (
-                      <p>{achievement.description}</p>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
 
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
@@ -486,13 +288,11 @@ export async function HomeContent() {
                 <em>Frost.</em>
               </h2>
             </div>
-
             <div>
               <p className="large-copy">
                 A clinician by training, a writer by instinct, and a
                 student of the world by choice.
               </p>
-
               <p>
                 This is my personal space for exploring ideas, recording
                 observations and connecting seemingly different worlds.
@@ -500,10 +300,9 @@ export async function HomeContent() {
                 everyday life, I believe curiosity makes room for better
                 questions.
               </p>
-
-              <a className="text-link" href="#essays">
+              <Link className="text-link" href="/#essays">
                 Explore my writing <ArrowUpRight size={16} />
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -512,13 +311,11 @@ export async function HomeContent() {
           <span className="eyebrow">
             Correspondence · Open to conversation
           </span>
-
           <h2>
             Have a thought
             <br />
             to <em>share?</em>
           </h2>
-
           <p className="contact-intro">
             For thoughtful conversations, writing, collaborations and
             ideas worth exploring.
@@ -568,10 +365,7 @@ export async function HomeContent() {
             </a>
           </div>
 
-          <a
-            className="contact-email"
-            href="mailto:myselfasadfrost@gmail.com"
-          >
+          <a className="contact-email" href="mailto:myselfasadfrost@gmail.com">
             myselfasadfrost@gmail.com <ArrowUpRight size={20} />
           </a>
         </section>
