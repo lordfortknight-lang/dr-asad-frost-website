@@ -1,4 +1,3 @@
-
 import type { MetadataRoute } from 'next'
 import { sanityClient } from '@/lib/sanity'
 
@@ -46,6 +45,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      url: `${siteUrl}/dental-cases`,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ]
 
   try {
@@ -57,9 +61,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }>
     >(
       `*[
-        _type in ["article", "magazineIssue"] &&
+        _type in ["article", "magazineIssue", "dentalCase"] &&
         defined(slug.current) &&
-        !(_id in path("drafts.**"))
+        !(_id in path("drafts.**")) &&
+        ( _type != "dentalCase" || patientConsent == true )
       ] {
         _type,
         slug,
@@ -69,14 +74,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const contentRoutes: MetadataRoute.Sitemap = content
       .filter((item) => item.slug?.current)
-      .map((item) => ({
-        url: `${siteUrl}/${item._type === 'article' ? 'articles' : 'magazine'}/${item.slug!.current}`,
-        ...(item.publishedAt
-          ? { lastModified: new Date(item.publishedAt) }
-          : {}),
-        changeFrequency: 'monthly',
-        priority: item._type === 'article' ? 0.7 : 0.6,
-      }))
+      .map((item) => {
+        if (item._type === 'dentalCase') {
+          return {
+            url: `${siteUrl}/dental-cases/${item.slug!.current}`,
+            ...(item.publishedAt ? { lastModified: new Date(item.publishedAt) } : {}),
+            changeFrequency: 'monthly',
+            priority: 0.6,
+          }
+        }
+
+        return {
+          url: `${siteUrl}/${item._type === 'article' ? 'articles' : 'magazine'}/${item.slug!.current}`,
+          ...(item.publishedAt ? { lastModified: new Date(item.publishedAt) } : {}),
+          changeFrequency: 'monthly',
+          priority: item._type === 'article' ? 0.7 : 0.6,
+        }
+      })
 
     return [...staticRoutes, ...contentRoutes]
   } catch {

@@ -14,6 +14,7 @@ const nav = [
   ['Achievements', '/achievements'],
   ['Milestones', '/milestones'],
   ['Recognition', '/recognition'],
+  ['Dental Casebook', '/dental-cases'],
   ['Contact', '/contact'],
 ]
 

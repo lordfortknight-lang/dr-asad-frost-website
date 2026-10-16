@@ -1,4 +1,3 @@
-
 import { createClient } from "@sanity/client";
 
 export const sanityClient = createClient({
@@ -113,3 +112,36 @@ export const achievementsQuery = `*[
     alt
   }
 }`;
+
+export const dentalCasesQuery = `*[_type == "dentalCase" && defined(slug.current) && !(_id in path("drafts.**")) && patientConsent == true] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  slug,
+  treatmentCategory,
+  anonymizedSummary,
+  publishedAt,
+  tags,
+  "image": coalesce(
+    beforePhotos[0] { asset->{url}, alt },
+    afterPhotos[0] { asset->{url}, alt },
+    image { asset->{url}, alt }
+  )
+}`
+
+export const dentalCaseBySlugQuery = `*[_type == "dentalCase" && slug.current == $slug && !(_id in path("drafts.**")) && patientConsent == true][0] {
+  _id,
+  title,
+  slug,
+  treatmentCategory,
+  anonymizedSummary,
+  findings,
+  diagnosis,
+  treatmentPlan,
+  procedure,
+  outcome,
+  followUp,
+  publishedAt,
+  tags,
+  "beforePhotos": beforePhotos[] { asset->{url}, caption, alt },
+  "afterPhotos": afterPhotos[] { asset->{url}, caption, alt }
+}`
