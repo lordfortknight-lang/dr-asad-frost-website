@@ -4,7 +4,6 @@ import Link from 'next/link'
 import {
   MessageCircle,
   Mail,
-  Instagram,
   ArrowUpRight,
 } from 'lucide-react'
 import { SiteShell } from '@/components/site-shell'
@@ -31,7 +30,7 @@ const contactLinks = [
   {
     label: 'Instagram',
     href: 'https://www.instagram.com/asad_frost/',
-    icon: Instagram,
+    icon: null,
     external: true,
   },
   {
@@ -47,10 +46,7 @@ export default function ContactPage() {
     <SiteShell>
       <main className="min-h-screen bg-[#b79a61] px-5 py-16 text-[#762b3b] sm:px-10 sm:py-24">
         <div className="mx-auto max-w-5xl">
-          <Link
-            href="/"
-            className="text-sm hover:underline"
-          >
+          <Link href="/" className="text-sm hover:underline">
             ← Back to Home
           </Link>
 
@@ -92,8 +88,19 @@ export default function ContactPage() {
                     }
                     className="group inline-flex items-center gap-4 border-b border-transparent pb-2 text-lg transition hover:border-[#762b3b] sm:text-xl"
                   >
-                    <Icon size={23} strokeWidth={1.7} />
+                    {Icon ? (
+                      <Icon size={23} strokeWidth={1.7} />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="inline-flex h-[23px] w-[23px] items-center justify-center rounded-md border-2 border-current text-lg font-semibold leading-none"
+                      >
+                        ◎
+                      </span>
+                    )}
+
                     <span>{item.label}</span>
+
                     <ArrowUpRight
                       size={17}
                       className="transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
