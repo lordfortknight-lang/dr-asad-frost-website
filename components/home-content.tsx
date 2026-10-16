@@ -103,20 +103,6 @@ export async function HomeContent() {
 
   return (
     <>
-      <nav className="section-pad flex flex-wrap items-center justify-between gap-4 border-b border-[#e6d9c9] py-4">
-        <Link href="/" className="font-serif text-lg font-semibold">
-          Dr Asad Frost
-        </Link>
-        <div className="flex flex-wrap items-center gap-5 text-sm">
-          <Link href="/#essays" className="hover:underline">Journal</Link>
-          <Link href="/books" className="hover:underline">Books</Link>
-          <Link href="/magazine" className="hover:underline">Magazine</Link>
-          <Link href="/#achievements" className="hover:underline">Achievements</Link>
-          <Link href="/#about" className="hover:underline">About</Link>
-          <Link href="/#contact" className="hover:underline">Contact</Link>
-        </div>
-      </nav>
-
       <main className="site-shell">
         <section className="hero section-pad">
           <div className="hero-kicker">
