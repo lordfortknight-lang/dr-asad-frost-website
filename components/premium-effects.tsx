@@ -19,19 +19,20 @@ export function PremiumEffects() {
       '.feature-image img, .essay-photo img'
     )
 
-    const observer = 'IntersectionObserver' in window
-      ? new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('image-revealed')
-                observer.unobserve(entry.target)
-              }
-            })
-          },
-          { threshold: 0.12 }
-        )
-      : null
+    const observer =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('image-revealed')
+                  observer?.unobserve(entry.target)
+                }
+              })
+            },
+            { threshold: 0.12 }
+          )
+        : null
 
     images.forEach((img) => {
       if (observer) {
