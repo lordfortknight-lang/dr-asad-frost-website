@@ -8,7 +8,7 @@ import { PremiumEffects } from './premium-effects'
 
 const nav = [
   ['Work', '/#work'],
-  ['Essays', '/#essays'],
+  ['Journal', '/journal'],
   ['About', '/#about'],
   ['Contact', '/#contact'],
 ]
