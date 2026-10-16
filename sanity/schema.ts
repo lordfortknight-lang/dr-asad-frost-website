@@ -1,4 +1,3 @@
-
 import type { SchemaTypeDefinition } from 'sanity'
 
 const slug = {
@@ -38,6 +37,85 @@ const tags = {
   type: 'array',
   of: [{ type: 'string' }],
   options: { layout: 'tags' },
+}
+
+/*
+  dentalCase schema
+
+  Editorial safeguards:
+  - Before publishing, authors MUST confirm documented patient consent for publication of clinical photos.
+  - Do not include patient names, dates of birth, contact details, or any direct identifiers in any field.
+  - Anonymize clinical details where possible. Use the 'anonymizedSummary' field for public clinical narrative.
+*/
+const dentalCase = {
+  name: 'dentalCase',
+  title: 'Dental Case',
+  type: 'document',
+  fields: [
+    { name: 'title', type: 'string', validation: (Rule: any) => Rule.required() },
+    slug,
+    { name: 'treatmentCategory', type: 'string', title: 'Treatment category' },
+    {
+      name: 'anonymizedSummary',
+      type: 'text',
+      title: 'Anonymized clinical summary',
+      description: 'Short anonymized summary suitable for public display. Remove any direct patient identifiers.',
+    },
+    { name: 'findings', type: 'text', title: 'Findings' },
+    { name: 'diagnosis', type: 'text', title: 'Diagnosis' },
+    { name: 'treatmentPlan', type: 'text', title: 'Treatment plan' },
+    { name: 'procedure', type: 'array', of: [{ type: 'block' }, { type: 'image' }], title: 'Procedure (notes / images)' },
+    { name: 'outcome', type: 'text', title: 'Outcome' },
+    { name: 'followUp', type: 'text', title: 'Follow-up (optional)' },
+    {
+      name: 'beforePhotos',
+      title: 'Before photos',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            { name: 'caption', type: 'string', title: 'Caption' },
+            { name: 'alt', type: 'string', title: 'Alt text', validation: (Rule: any) => Rule.required() },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'afterPhotos',
+      title: 'After photos',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            { name: 'caption', type: 'string', title: 'Caption' },
+            { name: 'alt', type: 'string', title: 'Alt text', validation: (Rule: any) => Rule.required() },
+          ],
+        },
+      ],
+    },
+    { name: 'publishedAt', type: 'datetime' },
+    { name: 'patientConsent', type: 'boolean', title: 'Patient consent confirmed', description: 'Check to confirm documented consent to publish anonymised case and images. Only cases with consent will appear on the public site.' , validation: (Rule: any) => Rule.required() },
+    tags,
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      media: 'beforePhotos.0',
+      patientConsent: 'patientConsent',
+    },
+    prepare(selection: any) {
+      const { title, media, patientConsent } = selection
+      return {
+        title,
+        subtitle: patientConsent ? 'Consented' : 'Not consented',
+        media,
+      }
+    },
+  },
 }
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -128,4 +206,6 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       image,
     ],
   },
+  // new dentalCase schema
+  dentalCase,
 ]
