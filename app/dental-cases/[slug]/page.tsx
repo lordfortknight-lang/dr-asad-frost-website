@@ -2,11 +2,16 @@ import { sanityClient, dentalCaseBySlugQuery } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { DentalCaseBeforeAfter } from '@/components/dental-case-before-after'
+import { PortableText } from '@portabletext/react'
 
 export const revalidate = 60
 
-export default async function DentalCasePage({ params }: { params: { slug: string } }) {
-  const { slug } = params
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export default async function DentalCasePage({ params }: Props) {
+  const { slug } = await params
   const dentalCase = await sanityClient.fetch(dentalCaseBySlugQuery, { slug })
 
   if (!dentalCase) return notFound()
@@ -51,7 +56,9 @@ export default async function DentalCasePage({ params }: { params: { slug: strin
           {dentalCase.procedure && (
             <div>
               <h2 className="text-xl font-semibold">Procedure</h2>
-              <pre className="mt-2 whitespace-pre-wrap text-[#715d58]">{JSON.stringify(dentalCase.procedure, null, 2)}</pre>
+              <div className="mt-2 text-[#715d58]">
+                <PortableText value={dentalCase.procedure} />
+              </div>
             </div>
           )}
 
