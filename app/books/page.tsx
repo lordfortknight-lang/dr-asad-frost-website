@@ -31,7 +31,7 @@ type Book = {
 async function getBooks(): Promise<Book[]> {
   try {
     return await client.fetch(
-      `*[_type == "book"] | order(title asc) {
+      `*[_type == "book" && !(_id in path("drafts.**"))] | order(title asc) {
         _id,
         title,
         subtitle,
@@ -47,7 +47,7 @@ async function getBooks(): Promise<Book[]> {
   }
 }
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function BooksPage() {
   const books = await getBooks();

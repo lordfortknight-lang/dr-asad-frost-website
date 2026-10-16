@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { sanityClient } from '@/lib/sanity'
 
-export const revalidate = 60
+export const revalidate = 0
 
 type Magazine = {
   _id: string
@@ -15,7 +15,7 @@ type Magazine = {
   pdf?: { asset?: { url?: string } }
 }
 
-const magazinesQuery = `*[_type == "magazineIssue" && defined(slug.current)] | order(publishedAt desc) {
+const magazinesQuery = `*[_type == "magazineIssue" && defined(slug.current) && !(_id in path("drafts.**"))] | order(publishedAt desc) {
   _id, title, issueNumber, publishedAt, description, slug,
   "image": image { "asset": asset->{url}, alt },
   "pdf": pdf { "asset": asset->{url} }

@@ -14,7 +14,7 @@ type Article = {
 async function getArticles(): Promise<Article[]> {
   try {
     return await sanityClient.fetch(`
-      *[_type == "article" && defined(slug.current)] | order(publishedAt desc) {
+      *[_type == "article" && defined(slug.current) && !(_id in path("drafts.**"))] | order(publishedAt desc) {
         _id,
         title,
         excerpt,
@@ -29,7 +29,7 @@ async function getArticles(): Promise<Article[]> {
   }
 }
 
-export const revalidate = 60
+export const revalidate = 0
 
 export default async function JournalPage() {
   const articles = await getArticles()
