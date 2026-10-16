@@ -12,6 +12,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
+      url: `${siteUrl}/journal`,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/books`,
       changeFrequency: 'monthly',
       priority: 0.7,
