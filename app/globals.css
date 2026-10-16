@@ -1,7 +1,17 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-:root { --cream:#f7f1e7; --burgundy:#762b3b; --gold:#b79a61; --ink:#241c1b; --line:rgba(36,28,27,.18); }
+:root {
+  --cream: #f7f1e7;
+  --cream-deep: #eee5d8;
+  --burgundy: #762b3b;
+  --burgundy-deep: #4c2028;
+  --gold: #b79a61;
+  --gold-soft: #d5bca2;
+  --ink: #241c1b;
+  --muted: #806f6b;
+  --line: rgba(36, 28, 27, .18);
+}
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--cream); color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
@@ -367,6 +377,20 @@ button:focus-visible {
   z-index: 30;
 }
 
+@media (max-width: 700px) {
+  .site-header.site-header-branded { min-height: 82px; padding: 12px 54px 12px 14px; }
+  .brand-logo-image { max-height: 58px; }
+  .site-header.site-header-branded .menu-toggle { right: 10px; }
+  .main-nav { top: 82px; padding: 22px 6vw; gap: 20px; }
+  .hero-copy { padding-top: 42px; padding-bottom: 34px; }
+  .hero h1 { max-width: 100%; font-size: clamp(3.25rem, 15vw, 5.5rem); }
+  .section-pad { padding-top: 42px; padding-bottom: 42px; }
+  .explore-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .explore-card { min-height: 150px; padding: 14px; }
+  .explore-card:last-child { grid-column: span 2; }
+  .explore-card-title { font-size: 1.7rem; }
+}
+
 @media (max-width: 600px) {
   .site-header.site-header-branded {
     min-height: 118px;
@@ -386,6 +410,16 @@ button:focus-visible {
     right: 12px;
   }
 }
+
+.explore { background: var(--cream); }
+.explore-title { margin: 18px 0 0; color: var(--burgundy); font-size: clamp(3rem, 6vw, 6rem); line-height: .88; }
+.explore-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.explore-card { min-height: 190px; display: flex; flex-direction: column; gap: 12px; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--burgundy); transition: background-color 220ms ease, transform 220ms ease; }
+.explore-card:hover { background: var(--cream-deep); transform: translateY(-3px); }
+.explore-number { color: var(--gold); font: 11px/1 Arial, sans-serif; letter-spacing: .12em; }
+.explore-card-title { margin-top: auto; font: 2rem/1 Georgia, serif; letter-spacing: -.05em; }
+.explore-description { max-width: 150px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.explore-card svg { align-self: flex-end; color: var(--gold); }
 
 @media (max-width: 380px) {
   .site-header.site-header-branded {

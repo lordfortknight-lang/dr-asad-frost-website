@@ -103,20 +103,6 @@ export async function HomeContent() {
 
   return (
     <>
-      <nav className="section-pad flex flex-wrap items-center justify-between gap-4 border-b border-[#e6d9c9] py-4">
-        <Link href="/" className="font-serif text-lg font-semibold">
-          Dr Asad Frost
-        </Link>
-        <div className="flex flex-wrap items-center gap-5 text-sm">
-          <Link href="/journal" className="hover:underline">Journal</Link>
-          <Link href="/books" className="hover:underline">Books</Link>
-          <Link href="/magazine" className="hover:underline">Magazine</Link>
-          <Link href="/#achievements" className="hover:underline">Achievements</Link>
-          <Link href="/#about" className="hover:underline">About</Link>
-          <Link href="/#contact" className="hover:underline">Contact</Link>
-        </div>
-      </nav>
-
       <main className="site-shell">
         <section className="hero section-pad">
           <div className="hero-kicker">
@@ -147,6 +133,32 @@ export async function HomeContent() {
               <Feather size={15} /> Notes from a curious mind
             </span>
             <span className="hero-note">Read slowly. Think deeply.</span>
+          </div>
+        </section>
+
+        <section id="explore" className="explore section-pad">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">A considered archive</span>
+              <h2 className="explore-title">Explore my <em>work.</em></h2>
+            </div>
+            <span className="eyebrow">Five ways in</span>
+          </div>
+          <div className="explore-grid">
+            {[
+              ['01', 'Journal', 'Essays, observations and notes.', '/journal'],
+              ['02', 'Essays', 'Longer thoughts to sit with.', '/journal'],
+              ['03', 'Books', 'A growing reading room.', '/books'],
+              ['04', 'Magazine', 'Issues made for slow reading.', '/magazine'],
+              ['05', 'Achievements', 'Milestones and recognition.', '/#achievements'],
+            ].map(([number, title, description, href]) => (
+              <Link className="explore-card" href={href} key={title}>
+                <span className="explore-number">{number}</span>
+                <span className="explore-card-title">{title}</span>
+                <span className="explore-description">{description}</span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </Link>
+            ))}
           </div>
         </section>
 
