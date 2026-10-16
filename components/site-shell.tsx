@@ -1,4 +1,3 @@
-
 'use client'
 
 import Link from 'next/link'
@@ -56,6 +55,40 @@ export function SiteShell({
 }) {
   const [open, setOpen] = useState(false)
 
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    setOpen(false)
+
+    const hashIndex = href.indexOf('#')
+
+    if (hashIndex === -1) return
+
+    const targetId = href.slice(hashIndex + 1)
+
+    if (window.location.pathname === '/') {
+      const target = document.getElementById(targetId)
+
+      if (target) {
+        event.preventDefault()
+
+        window.history.replaceState(
+          null,
+          '',
+          `/#${targetId}`
+        )
+
+        window.requestAnimationFrame(() => {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+        })
+      }
+    }
+  }
+
   return (
     <div className="site-shell">
       <ReadingProgress />
@@ -96,7 +129,7 @@ export function SiteShell({
             <Link
               key={href}
               href={href}
-              onClick={() => setOpen(false)}
+              onClick={(event) => handleNavClick(event, href)}
             >
               {label}
             </Link>
@@ -105,7 +138,9 @@ export function SiteShell({
           <Link
             className="studio-link"
             href="/#contact"
-            onClick={() => setOpen(false)}
+            onClick={(event) =>
+              handleNavClick(event, '/#contact')
+            }
           >
             Get in touch <ArrowUpRight size={15} />
           </Link>
