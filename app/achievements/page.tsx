@@ -26,10 +26,10 @@ export default function AchievementsPage() {
               The journey so far
             </p>
 
-            <h1 className="font-serif text-5xl font-semibold sm:text-7xl">
+            <h1 className="font-serif text-[clamp(2.2rem,9vw,4.5rem)] font-semibold leading-tight break-words">
               Achievements
               <br />
-              <em>& milestones.</em>
+              <em>&amp; milestones.</em>
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#715d58]">
