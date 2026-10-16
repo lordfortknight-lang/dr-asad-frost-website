@@ -5,5 +5,9 @@ import { SiteShell } from '@/components/site-shell'
 export const revalidate = 0
 
 export default function Page() {
-  return <SiteShell><HomeContent /></SiteShell>
+  return (
+    <SiteShell>
+      <HomeContent />
+    </SiteShell>
+  )
 }
