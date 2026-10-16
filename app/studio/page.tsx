@@ -1,8 +1,10 @@
-
-import { NextStudio } from 'next-sanity/studio'
+import dynamic from 'next/dynamic'
 import config from '../../sanity.config'
 
-export const dynamic = 'force-static'
+const NextStudio = dynamic(
+  async () => (await import('next-sanity/studio')).NextStudio,
+  { ssr: false }
+)
 
 export default function StudioPage() {
   return <NextStudio config={config} />
