@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { sanityClient } from '@/lib/sanity'
 
-export const revalidate = 60
+export const revalidate = 0
 
 type Magazine = {
   title: string
@@ -12,7 +12,7 @@ type Magazine = {
   pdf?: { url?: string; originalFilename?: string }
 }
 
-const magazineQuery = `*[_type == "magazineIssue" && slug.current == $slug][0] {
+const magazineQuery = `*[_type == "magazineIssue" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
   title, issueNumber, publishedAt, description,
   "pdf": pdf.asset->{url, originalFilename}
 }`

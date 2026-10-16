@@ -5,7 +5,9 @@ export const sanityClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "n159dle8",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: "2025-01-01",
-  useCdn: true,
+  // Read the published dataset directly so production reflects publishes without waiting for the CDN cache.
+  useCdn: false,
+  perspective: "published",
 });
 
 export const contentQuery = `*[
@@ -36,7 +38,7 @@ export const contentQuery = `*[
   )
 }`;
 
-export const booksQuery = `*[_type == "book"] | order(title asc) {
+export const booksQuery = `*[_type == "book" && !(_id in path("drafts.**"))] | order(title asc) {
   _id,
   title,
   subtitle,
@@ -51,7 +53,7 @@ export const booksQuery = `*[_type == "book"] | order(title asc) {
   }
 }`;
 
-export const magazinesQuery = `*[_type == "magazineIssue"] | order(publishedAt desc) {
+export const magazinesQuery = `*[_type == "magazineIssue" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
   _id,
   title,
   subtitle,

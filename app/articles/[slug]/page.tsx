@@ -1,6 +1,8 @@
 import { sanityClient } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 
+export const revalidate = 0
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -9,7 +11,7 @@ export default async function ArticlePage({ params }: Props) {
   const { slug } = await params
 
   const article = await sanityClient.fetch(
-    `*[_type == "article" && slug.current == $slug][0] {
+    `*[_type == "article" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
       title,
       excerpt,
       category,
