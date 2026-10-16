@@ -108,7 +108,7 @@ export async function HomeContent() {
           Dr Asad Frost
         </Link>
         <div className="flex flex-wrap items-center gap-5 text-sm">
-          <Link href="/#essays" className="hover:underline">Journal</Link>
+          <Link href="/journal" className="hover:underline">Journal</Link>
           <Link href="/books" className="hover:underline">Books</Link>
           <Link href="/magazine" className="hover:underline">Magazine</Link>
           <Link href="/#achievements" className="hover:underline">Achievements</Link>
