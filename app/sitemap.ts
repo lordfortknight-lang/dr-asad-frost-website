@@ -13,6 +13,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: siteUrl, changeFrequency: 'monthly', priority: 1 },
+    { url: `${siteUrl}/journal`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${siteUrl}/books`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${siteUrl}/magazine`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${siteUrl}/clinical-world`, changeFrequency: 'weekly', priority: 0.8 },
     ...clinical.map((item) => ({
       url: `${siteUrl}/clinical-world/${item.slug}`,
