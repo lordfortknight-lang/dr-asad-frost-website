@@ -117,7 +117,7 @@ export const patientStoriesQuery = `*[
   }
 }`;
 
-export const clinicalWorldQuery = `*[_type == "clinicalContent" && !(_id in path("drafts.**")) && defined(slug.current) && (category == $category || !defined($category)) && (specialty == $specialty || !defined($specialty)) && (!consentConfirmed == true && (title match $search || excerpt match $search || tags[] match $search || $search == "")] | order(featured desc, publishedAt desc, _createdAt desc) {
+export const clinicalWorldQuery = `*[_type == "clinicalContent" && !(_id in path("drafts.**")) && defined(slug.current) && (category == $category || !defined($category)) && (specialty == $specialty || !defined($specialty)) && consentConfirmed == true && (title match $search || excerpt match $search || tags[] match $search || $search == "")] | order(featured desc, publishedAt desc, _createdAt desc) {
   _id, title, slug, excerpt, category, specialty, author, publishedAt, updatedAt, featured, tags,
   "image": image { asset->{url}, alt, caption }
 }`;
