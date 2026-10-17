@@ -169,7 +169,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       { name: 'discussion', type: 'array', of: [{ type: 'block' }] },
       { name: 'learningPoints', type: 'array', of: [{ type: 'string' }] },
       { name: 'references', type: 'array', of: [{ type: 'string' }] },
-      { name: 'consentConfirmed', type: 'boolean', title: 'Documented consent confirmed', description: 'Confirm documented consent and anonymisation before publishing clinical details or photographs.', validation: (Rule: any) => Rule.custom((value: any, context: any) => context.document?.category === 'Clinical article' || value === true ? true : 'Required before publishing a case.') },
+      { name: 'consentConfirmed', type: 'boolean', title: 'Documented consent confirmed', description: 'Confirm documented consent and anonymisation before publishing clinical details or photographs.', validation: (Rule: any) => Rule.custom((value: any) => value === true ? true : 'Required before publishing clinical content.') },
     ],
     orderings: [{ title: 'Publication date, newest first', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] }],
   },
