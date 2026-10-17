@@ -8,6 +8,7 @@ import { PremiumEffects } from './premium-effects'
 
 const nav = [
   ['Work', '/#work'],
+  ['Clinical World', '/clinical-world'],
   ['Journal', '/journal'],
   ['About', '/#about'],
   ['Contact', '/#contact'],

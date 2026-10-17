@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Dr Asad Frost — Writer. Scholar. Observer.',
-  description: 'The independent literary practice of Dr Asad Frost: essays, scholarship, books, and photographs.',
+  description: 'The independent literary practice and clinical knowledge platform of Dr Asad Frost: essays, scholarship, dentistry, and photographs.',
   generator: 'Next.js',
   icons: {
     icon: [

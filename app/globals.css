@@ -817,14 +817,40 @@ button:focus-visible {
     display: flex;
     pointer-events: auto;
   }
-
-  .site-header.site-header-branded .main-nav a {
-    position: relative;
-    z-index: 102;
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    pointer-events: auto;
-    touch-action: manipulation;
-  }
 }
+
+.clinical-page, .clinical-detail { max-width: 1180px; margin: 0 auto; }
+.clinical-hero { max-width: 760px; padding: 5rem 0 3rem; border-bottom: 1px solid var(--line); }
+.clinical-hero h1, .clinical-detail h1 { font-size: clamp(3.2rem, 8vw, 7rem); line-height: .92; margin: 1rem 0 1.5rem; }
+.clinical-hero p, .clinical-lede { max-width: 650px; font-size: 1.25rem; line-height: 1.6; }
+.clinical-hero small, .clinical-disclaimer { display: block; max-width: 700px; color: var(--muted); line-height: 1.6; margin-top: 1.5rem; }
+.clinical-toolbar { display: flex; gap: 2rem; justify-content: space-between; align-items: flex-start; padding: 2rem 0; border-bottom: 1px solid var(--line); }
+.clinical-filters { display: flex; flex-wrap: wrap; gap: .55rem; }
+.clinical-filters a { border: 1px solid var(--line); padding: .5rem .75rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+.clinical-filters a.is-active { background: var(--burgundy); color: var(--cream); }
+.clinical-search { display: flex; gap: .5rem; align-items: center; }
+.clinical-search label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.clinical-search input { border: 1px solid var(--line); background: transparent; padding: .55rem .7rem; min-width: 180px; }
+.clinical-search button { border: 0; background: var(--burgundy); color: var(--cream); padding: .62rem .8rem; text-transform: uppercase; font-size: .7rem; letter-spacing: .1em; }
+.clinical-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: 2rem; }
+.clinical-card { background: var(--cream); padding: 1.5rem; min-height: 250px; display: flex; flex-direction: column; }
+.clinical-card-meta, .clinical-card-footer { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: .73rem; text-transform: uppercase; letter-spacing: .08em; }
+.clinical-card h2 { font-size: 1.7rem; line-height: 1.1; margin: 2.2rem 0 1rem; }
+.clinical-card p { color: var(--muted); line-height: 1.55; }
+.clinical-card-footer { margin-top: auto; align-items: center; }
+.clinical-card-footer a, .back-link, .clinical-related a { display: inline-flex; align-items: center; gap: .35rem; color: var(--burgundy); }
+.clinical-empty { display: flex; gap: .75rem; align-items: flex-start; padding: 3rem 0; color: var(--muted); }
+.clinical-detail { max-width: 920px; }
+.back-link { margin: 3rem 0; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
+.clinical-detail header { border-bottom: 1px solid var(--line); padding-bottom: 2rem; }
+.clinical-byline { color: var(--muted); font-size: .85rem; }
+.clinical-detail-image { margin: 2.5rem 0; }
+.clinical-detail-image img { width: 100%; max-height: 580px; object-fit: cover; }
+.clinical-detail-image figcaption { color: var(--muted); font-size: .8rem; margin-top: .5rem; }
+.clinical-reading { max-width: 700px; margin: 3rem auto; }
+.clinical-reading section { margin: 2.5rem 0; }
+.clinical-reading h2, .clinical-related h2 { font-size: 1.45rem; margin-bottom: .75rem; }
+.clinical-reading p, .clinical-reading li { line-height: 1.75; }
+.clinical-related { border-top: 1px solid var(--line); padding-top: 2rem; display: grid; gap: .8rem; }
+@media (max-width: 760px) { .clinical-toolbar { flex-direction: column; } .clinical-grid { grid-template-columns: 1fr; } .clinical-search { width: 100%; } .clinical-search input { flex: 1; } .clinical-hero { padding-top: 3rem; } }
+
