@@ -117,6 +117,25 @@ export const schemaTypes: SchemaTypeDefinition[] = [
     ],
   },
   {
+    name: 'patientStory',
+    title: 'Dental patient story',
+    type: 'document',
+    fields: [
+      { name: 'title', type: 'string', title: 'Case title', validation: (Rule: any) => Rule.required() },
+      { name: 'caseType', type: 'string', title: 'Case type', options: { list: ['Case history', 'Patient testimonial', 'Clinical work'] } },
+      { name: 'summary', type: 'text', rows: 3, title: 'Short summary' },
+      { name: 'details', type: 'text', rows: 6, title: 'Case history / patient words' },
+      { name: 'treatment', type: 'string', title: 'Treatment area' },
+      { name: 'patientLabel', type: 'string', title: 'Patient label', description: 'Use an anonymous label only, such as “Patient A” or “Adult patient”.' },
+      image,
+      { name: 'consentConfirmed', type: 'boolean', title: 'Consent confirmed', validation: (Rule: any) => Rule.required() },
+      { name: 'publishedAt', type: 'date', title: 'Publication date' },
+    ],
+    orderings: [
+      { title: 'Publication date, newest first', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
+    ],
+  },
+  {
     name: 'achievement',
     title: 'Academic achievement',
     type: 'document',

@@ -98,6 +98,25 @@ export const magazineBySlugQuery = `*[_type == "magazineIssue" && slug.current =
   }
 }`;
 
+export const patientStoriesQuery = `*[
+  _type == "patientStory" &&
+  consentConfirmed == true &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  caseType,
+  summary,
+  details,
+  treatment,
+  patientLabel,
+  publishedAt,
+  "image": image {
+    asset->{url},
+    alt
+  }
+}`;
+
 export const achievementsQuery = `*[
   _type == "achievement" &&
   !(_id in path("drafts.**"))

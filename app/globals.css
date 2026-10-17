@@ -389,6 +389,10 @@ button:focus-visible {
   .explore-card { min-height: 150px; padding: 14px; }
   .explore-card:last-child { grid-column: span 2; }
   .explore-card-title { font-size: 1.7rem; }
+  .patient-work-intro { margin: -8px 0 30px; }
+  .patient-story-list { grid-template-columns: 1fr; gap: 42px; }
+  .patient-story h3 { font-size: 2rem; }
+  .patient-story-image img { aspect-ratio: 1.35; }
 }
 
 @media (max-width: 600px) {
@@ -420,6 +424,20 @@ button:focus-visible {
 .explore-card-title { margin-top: auto; font: 2rem/1 Georgia, serif; letter-spacing: -.05em; }
 .explore-description { max-width: 150px; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .explore-card svg { align-self: flex-end; color: var(--gold); }
+
+.patient-work { background: var(--cream-deep); color: var(--ink); }
+.patient-work-title { margin: 18px 0 0; color: var(--burgundy); font-size: clamp(3rem, 6vw, 6rem); line-height: .88; }
+.patient-work-intro { max-width: 520px; margin: -18px 0 44px auto; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.patient-story-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.patient-story { border-top: 1px solid var(--line); padding-top: 16px; }
+.patient-story-meta { display: flex; justify-content: space-between; color: var(--burgundy); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.patient-story-image { margin: 24px 0; overflow: hidden; }
+.patient-story-image img { display: block; width: 100%; aspect-ratio: 1.2; object-fit: cover; filter: saturate(.65); }
+.patient-story-label { display: block; margin-bottom: 12px; color: var(--gold); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.patient-story h3 { margin: 0 0 10px; color: var(--burgundy); font-size: clamp(1.8rem, 3vw, 2.7rem); line-height: 1; }
+.patient-story p { max-width: 310px; color: #5d504d; font-size: 13px; line-height: 1.7; }
+.patient-story-treatment { color: var(--burgundy) !important; font-size: 11px !important; letter-spacing: .08em; text-transform: uppercase; }
+.patient-story-details { padding-top: 12px; border-top: 1px solid var(--line); }
 
 @media (max-width: 380px) {
   .site-header.site-header-branded {

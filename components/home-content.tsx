@@ -10,6 +10,7 @@ import {
   sanityClient,
   contentQuery,
   achievementsQuery,
+  patientStoriesQuery,
 } from '@/lib/sanity'
 
 type Article = {
@@ -33,6 +34,20 @@ type Achievement = {
   institution?: string
   year?: number | string
   description?: string
+  image?: {
+    asset?: { url?: string }
+    alt?: string
+  }
+}
+
+type PatientStory = {
+  _id: string
+  title: string
+  caseType?: string
+  summary?: string
+  details?: string
+  treatment?: string
+  patientLabel?: string
   image?: {
     asset?: { url?: string }
     alt?: string
@@ -81,6 +96,7 @@ function SocialIcon({
 export async function HomeContent() {
   let essays: Article[] = []
   let achievements: Achievement[] = []
+  let patientStories: PatientStory[] = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
@@ -92,6 +108,12 @@ export async function HomeContent() {
     achievements = await sanityClient.fetch(achievementsQuery)
   } catch (error) {
     console.error('Sanity achievements fetch failed:', error)
+  }
+
+  try {
+    patientStories = await sanityClient.fetch(patientStoriesQuery)
+  } catch (error) {
+    console.error('Sanity patient stories fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -151,6 +173,7 @@ export async function HomeContent() {
               ['03', 'Books', 'A growing reading room.', '/books'],
               ['04', 'Magazine', 'Issues made for slow reading.', '/magazine'],
               ['05', 'Achievements', 'Milestones and recognition.', '/#achievements'],
+              ['06', 'Patient work', 'Dental case histories and voices.', '/#patient-work'],
             ].map(([number, title, description, href]) => (
               <Link className="explore-card" href={href} key={title}>
                 <span className="explore-number">{number}</span>
@@ -298,6 +321,45 @@ export async function HomeContent() {
             </div>
           )}
         </section>
+
+        {patientStories.length > 0 && (
+          <section id="patient-work" className="patient-work section-pad">
+            <div className="section-heading">
+              <div>
+                <span className="eyebrow">Dental care, thoughtfully shared</span>
+                <h2 className="patient-work-title">
+                  Patient work,
+                  <br />
+                  <em>with permission.</em>
+                </h2>
+              </div>
+              <span className="eyebrow">{patientStories.length} stories</span>
+            </div>
+            <p className="patient-work-intro">
+              An anonymised record of dental care, treatment journeys and patient experiences. Every story is shared only with consent.
+            </p>
+            <div className="patient-story-list">
+              {patientStories.map((story, index) => (
+                <article className="patient-story" key={story._id}>
+                  <div className="patient-story-meta">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span>{story.caseType || 'Dental case'}</span>
+                  </div>
+                  {story.image?.asset?.url && (
+                    <div className="patient-story-image">
+                      <img src={story.image.asset.url} alt={story.image.alt || story.title} loading="lazy" />
+                    </div>
+                  )}
+                  <span className="patient-story-label">{story.patientLabel || 'Anonymised patient story'}</span>
+                  <h3>{story.title}</h3>
+                  {story.treatment && <p className="patient-story-treatment">{story.treatment}</p>}
+                  <p>{story.summary || story.details}</p>
+                  {story.details && story.summary && <p className="patient-story-details">{story.details}</p>}
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         {achievements.length > 0 && (
           <section id="achievements" className="essays section-pad">
