@@ -98,6 +98,37 @@ export const magazineBySlugQuery = `*[_type == "magazineIssue" && slug.current =
   }
 }`;
 
+export const patientStoriesQuery = `*[
+  _type == "patientStory" &&
+  consentConfirmed == true &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  caseType,
+  summary,
+  details,
+  treatment,
+  patientLabel,
+  publishedAt,
+  "image": image {
+    asset->{url},
+    alt
+  }
+}`;
+
+export const clinicalWorldQuery = `*[_type == "clinicalContent" && !(_id in path("drafts.**")) && defined(slug.current) && (category == $category || !defined($category)) && (specialty == $specialty || !defined($specialty)) && consentConfirmed == true && (title match $search || excerpt match $search || tags[] match $search || $search == "")] | order(featured desc, publishedAt desc, _createdAt desc) {
+  _id, title, slug, excerpt, category, specialty, author, publishedAt, updatedAt, featured, tags,
+  "image": image { asset->{url}, alt, caption }
+}`;
+
+export const clinicalBySlugQuery = `*[_type == "clinicalContent" && slug.current == $slug && !(_id in path("drafts.**")) && consentConfirmed == true][0] {
+  ..., "image": image { asset->{url}, alt, caption },
+  "related": *[_type == "clinicalContent" && slug.current != $slug && category == ^.category && consentConfirmed == true && !(_id in path("drafts.**"))][0...3] { title, slug, category, excerpt }
+}`;
+
+export const clinicalSlugsQuery = `*[_type == "clinicalContent" && consentConfirmed == true && !(_id in path("drafts.**")) && defined(slug.current)] { "slug": slug.current, "updatedAt": coalesce(updatedAt, publishedAt, _updatedAt) }`
+
 export const achievementsQuery = `*[
   _type == "achievement" &&
   !(_id in path("drafts.**"))

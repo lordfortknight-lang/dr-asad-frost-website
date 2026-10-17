@@ -1,11 +1,14 @@
-import dynamic from 'next/dynamic'
-import config from '../../sanity.config'
+'use client'
 
-const NextStudio = dynamic(
-  async () => (await import('next-sanity/studio')).NextStudio,
+import dynamic from 'next/dynamic'
+
+const StudioShell = dynamic(
+  () => import('../../components/studio-shell').then((module) => module.StudioShell),
   { ssr: false }
 )
 
+export const dynamicParams = false
+
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return <StudioShell />
 }
