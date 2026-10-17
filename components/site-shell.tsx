@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link'
@@ -11,7 +12,10 @@ const nav = [
   ['Clinical World', '/clinical-world'],
   ['Journal', '/journal'],
   ['About', '/#about'],
-  ['Contact', '/#contact'],
+  ['Achievements', '/achievements'],
+  ['Milestones', '/milestones'],
+  ['Recognition', '/recognition'],
+  ['Contact', '/contact'],
 ]
 
 function ReadingProgress() {
@@ -138,10 +142,8 @@ export function SiteShell({
 
           <Link
             className="studio-link"
-            href="/#contact"
-            onClick={(event) =>
-              handleNavClick(event, '/#contact')
-            }
+            href="/contact"
+            onClick={() => setOpen(false)}
           >
             Get in touch <ArrowUpRight size={15} />
           </Link>
