@@ -164,7 +164,7 @@ export async function HomeContent() {
               <span className="eyebrow">A considered archive</span>
               <h2 className="explore-title">Explore my <em>work.</em></h2>
             </div>
-            <span className="eyebrow">Five ways in</span>
+            <span className="eyebrow explore-supporting-label">Six ways in</span>
           </div>
           <div className="explore-grid">
             {[
