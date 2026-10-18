@@ -416,14 +416,30 @@ button:focus-visible {
 }
 
 .explore { background: var(--cream); }
-.explore-title { margin: 18px 0 0; color: var(--burgundy); font-size: clamp(3rem, 6vw, 6rem); line-height: .88; }
-.explore-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.explore-card { min-height: 190px; display: flex; flex-direction: column; gap: 12px; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--burgundy); transition: background-color 220ms ease, transform 220ms ease; }
+.explore-title { margin: 18px 0 0; color: var(--burgundy); font-size: clamp(2.8rem, 6vw, 6rem); line-height: .9; }
+.explore-supporting-label { align-self: flex-end; }
+.explore-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.explore-card { min-width: 0; min-height: 190px; display: flex; flex-direction: column; gap: 12px; padding: clamp(16px, 2vw, 24px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--burgundy); transition: background-color 220ms ease, transform 220ms ease; }
 .explore-card:hover { background: var(--cream-deep); transform: translateY(-3px); }
 .explore-number { color: var(--gold); font: 11px/1 Arial, sans-serif; letter-spacing: .12em; }
-.explore-card-title { margin-top: auto; font: 2rem/1 Georgia, serif; letter-spacing: -.05em; }
-.explore-description { max-width: 150px; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.explore-card svg { align-self: flex-end; color: var(--gold); }
+.explore-card-title { min-width: 0; margin-top: auto; font: clamp(1.55rem, 2.6vw, 2rem)/1 Georgia, serif; letter-spacing: -.04em; overflow-wrap: anywhere; }
+.explore-description { max-width: 18rem; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.explore-card svg { flex: 0 0 auto; align-self: flex-end; color: var(--gold); }
+
+@media (max-width: 700px) {
+  .section-heading { min-width: 0; gap: 1rem; }
+  .explore-supporting-label { align-self: flex-start; margin-top: .25rem; }
+  .explore-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .explore-card { min-height: 156px; padding: 14px; }
+  .explore-card:last-child { grid-column: auto; }
+  .explore-card-title { font-size: clamp(1.35rem, 6.8vw, 1.7rem); }
+  .explore-description { max-width: none; font-size: 11px; }
+}
+
+@media (max-width: 380px) {
+  .explore-card { min-height: 148px; padding: 12px; }
+  .explore-card-title { font-size: clamp(1.2rem, 6.5vw, 1.45rem); }
+}
 
 .patient-work { background: var(--cream-deep); color: var(--ink); }
 .patient-work-title { margin: 18px 0 0; color: var(--burgundy); font-size: clamp(3rem, 6vw, 6rem); line-height: .88; }
@@ -852,5 +868,22 @@ button:focus-visible {
 .clinical-reading h2, .clinical-related h2 { font-size: 1.45rem; margin-bottom: .75rem; }
 .clinical-reading p, .clinical-reading li { line-height: 1.75; }
 .clinical-related { border-top: 1px solid var(--line); padding-top: 2rem; display: grid; gap: .8rem; }
-@media (max-width: 760px) { .clinical-toolbar { flex-direction: column; } .clinical-grid { grid-template-columns: 1fr; } .clinical-search { width: 100%; } .clinical-search input { flex: 1; } .clinical-hero { padding-top: 3rem; } }
+@media (max-width: 760px) {
+  .clinical-hero { padding-top: 2.5rem; }
+  .clinical-hero h1 { font-size: clamp(2.8rem, 14vw, 4.5rem); margin-bottom: 1rem; }
+  .clinical-hero p { font-size: 1rem; line-height: 1.5; }
+  .clinical-hero small { margin-top: 1rem; font-size: .75rem; line-height: 1.45; }
+  .clinical-toolbar { flex-direction: column; gap: 1rem; padding: 1.25rem 0; }
+  .clinical-filters { gap: .35rem; }
+  .clinical-filters a { padding: .4rem .55rem; font-size: .65rem; letter-spacing: .06em; }
+  .clinical-search { width: 100%; }
+  .clinical-search input { flex: 1; min-width: 0; width: 100%; padding: .5rem .6rem; }
+  .clinical-search button { padding: .57rem .7rem; }
+  .clinical-grid { grid-template-columns: minmax(0, 1fr); margin-top: 1.25rem; }
+  .clinical-card { min-width: 0; min-height: 0; padding: 1.1rem; }
+  .clinical-card h2 { font-size: clamp(1.35rem, 7vw, 1.7rem); margin: 1.5rem 0 .75rem; overflow-wrap: anywhere; }
+  .clinical-card p { font-size: .9rem; }
+  .clinical-card-meta, .clinical-card-footer { font-size: .62rem; }
+  .clinical-empty { padding: 2rem 0; font-size: .9rem; }
+}
 
