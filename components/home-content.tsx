@@ -11,7 +11,9 @@ import {
   contentQuery,
   achievementsQuery,
   patientStoriesQuery,
+  clinicalWorldQuery,
 } from '@/lib/sanity'
+import { FrostTerminal } from './frost-terminal'
 
 type Article = {
   _id: string
@@ -97,6 +99,7 @@ export async function HomeContent() {
   let essays: Article[] = []
   let achievements: Achievement[] = []
   let patientStories: PatientStory[] = []
+  let clinicalContent: Array<{ _id: string }> = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
@@ -114,6 +117,16 @@ export async function HomeContent() {
     patientStories = await sanityClient.fetch(patientStoriesQuery)
   } catch (error) {
     console.error('Sanity patient stories fetch failed:', error)
+  }
+
+  try {
+    clinicalContent = await sanityClient.fetch(clinicalWorldQuery, {
+      category: null,
+      specialty: null,
+      search: '',
+    })
+  } catch (error) {
+    console.error('Sanity clinical content fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -184,6 +197,12 @@ export async function HomeContent() {
             ))}
           </div>
         </section>
+
+        <FrostTerminal
+          journalCount={articles.length}
+          clinicalCount={clinicalContent.length}
+          archiveCount={achievements.length}
+        />
 
         <section id="work" className="feature section-pad">
           <div className="section-heading">
