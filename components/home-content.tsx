@@ -145,14 +145,9 @@ export async function HomeContent() {
               literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
-            <div className="hero-links">
-              <Link className="text-link" href="/#essays">
-                Explore the journal <ArrowDown size={16} />
-              </Link>
-              <Link className="hero-ai-link" href="/ai">
-                Meet Dr Asad Frost AI <ArrowUpRight size={16} />
-              </Link>
-            </div>
+            <Link className="text-link" href="/#essays">
+              Explore the journal <ArrowDown size={16} />
+            </Link>
           </div>
 
           <div className="hero-bottom">

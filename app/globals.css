@@ -35,9 +35,6 @@ h1,h2,h3,blockquote { font-family:Georgia, 'Times New Roman', serif; font-weight
 h1 { color:var(--burgundy); font-size:clamp(4.8rem,13vw,12.5rem); line-height:.82; margin:0; }
 em { color:var(--gold); font-style:italic; }
 .hero-intro { max-width:330px; margin:45px 0 0 auto; font-size:15px; line-height:1.55; }
-.hero-links { display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.5rem; margin-top:1.5rem; }
-.hero-ai-link { display:inline-flex; align-items:center; gap:.4rem; color:var(--burgundy); font:11px/1 Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; }
-.hero-ai-link:hover,.hero-ai-link:focus-visible { color:var(--gold); outline:none; }
 .hero-bottom { color:#806f6b; font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
 .scroll-label { display:flex; align-items:center; gap:8px; color:var(--burgundy); }
 .feature,.about { background:#eee5d8; }
