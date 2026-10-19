@@ -11,10 +11,7 @@ import {
   contentQuery,
   achievementsQuery,
   patientStoriesQuery,
-  clinicalWorldQuery,
 } from '@/lib/sanity'
-import { FrostTerminal } from './frost-terminal'
-import { SpatialIdentity } from './spatial-identity'
 
 type Article = {
   _id: string
@@ -100,7 +97,6 @@ export async function HomeContent() {
   let essays: Article[] = []
   let achievements: Achievement[] = []
   let patientStories: PatientStory[] = []
-  let clinicalContent: Array<{ _id: string }> = []
 
   try {
     essays = await sanityClient.fetch(contentQuery)
@@ -118,16 +114,6 @@ export async function HomeContent() {
     patientStories = await sanityClient.fetch(patientStoriesQuery)
   } catch (error) {
     console.error('Sanity patient stories fetch failed:', error)
-  }
-
-  try {
-    clinicalContent = await sanityClient.fetch(clinicalWorldQuery, {
-      category: null,
-      specialty: null,
-      search: '',
-    })
-  } catch (error) {
-    console.error('Sanity clinical content fetch failed:', error)
   }
 
   const articles = essays.filter(
@@ -159,9 +145,14 @@ export async function HomeContent() {
               literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
-            <Link className="text-link" href="/#essays">
-              Explore the journal <ArrowDown size={16} />
-            </Link>
+            <div className="hero-links">
+              <Link className="text-link" href="/#essays">
+                Explore the journal <ArrowDown size={16} />
+              </Link>
+              <Link className="hero-ai-link" href="/ai">
+                Meet Dr Asad Frost AI <ArrowUpRight size={16} />
+              </Link>
+            </div>
           </div>
 
           <div className="hero-bottom">
@@ -198,14 +189,6 @@ export async function HomeContent() {
             ))}
           </div>
         </section>
-
-        <SpatialIdentity />
-
-        <FrostTerminal
-          journalCount={articles.length}
-          clinicalCount={clinicalContent.length}
-          archiveCount={achievements.length}
-        />
 
         <section id="work" className="feature section-pad">
           <div className="section-heading">
