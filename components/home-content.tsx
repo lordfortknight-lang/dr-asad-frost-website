@@ -14,6 +14,7 @@ import {
   clinicalWorldQuery,
 } from '@/lib/sanity'
 import { FrostTerminal } from './frost-terminal'
+import { SpatialIdentity } from './spatial-identity'
 
 type Article = {
   _id: string
@@ -197,6 +198,8 @@ export async function HomeContent() {
             ))}
           </div>
         </section>
+
+        <SpatialIdentity />
 
         <FrostTerminal
           journalCount={articles.length}

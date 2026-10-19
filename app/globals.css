@@ -914,3 +914,12 @@ button:focus-visible {
 @keyframes terminal-scan { from { transform: translateY(0); } to { transform: translateY(5px); } }
 @media (max-width: 600px) { .frost-terminal-topline { align-items: flex-start; gap: .75rem; flex-direction: column; }.frost-terminal-intro { padding-top: 3rem; }.frost-terminal-grid { grid-template-columns: minmax(0, 1fr); }.frost-terminal-entry, .frost-terminal-entry:nth-child(2n), .frost-terminal-entry:nth-last-child(-n+2) { min-height: 175px; border-right: 0; border-bottom: 1px solid rgba(183,154,97,.24); }.frost-terminal-entry:last-child { border-bottom: 0; }.frost-terminal-entry strong { font-size: clamp(1.7rem, 9vw, 2.3rem); } }
 @media (prefers-reduced-motion: reduce) { .frost-terminal-frame::before { animation: none; }.frost-terminal-entry { transition: none; } }
+
+/* Hybrid futurism: restrained depth for the existing hero. */
+.hero { position: relative; isolation: isolate; overflow: hidden; background: radial-gradient(circle at 78% 38%, rgba(183,154,97,.18), transparent 28%), radial-gradient(circle at 18% 82%, rgba(118,43,59,.08), transparent 34%), var(--cream); }
+.hero::after { content: ""; position: absolute; inset: 12% -15% auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(183,154,97,.55), transparent); transform: rotate(-8deg); opacity: .5; pointer-events: none; }
+.hero-copy { position: relative; z-index: 1; animation: hero-copy-in 900ms 180ms cubic-bezier(.22,1,.36,1) both; }
+.hero-kicker, .hero-bottom { position: relative; z-index: 1; }
+.hero-intro { position: relative; z-index: 1; }
+@keyframes hero-copy-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .hero-copy { animation: none; } }
