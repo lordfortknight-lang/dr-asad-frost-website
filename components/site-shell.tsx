@@ -16,6 +16,7 @@ const nav = [
   ['Achievements', '/achievements'],
   ['Milestones', '/milestones'],
   ['Recognition', '/recognition'],
+  ['Dr Asad Frost AI', '/ai'],
   ['Contact', '/contact'],
 ]
 
