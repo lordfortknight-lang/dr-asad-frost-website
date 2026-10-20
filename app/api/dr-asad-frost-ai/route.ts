@@ -1,4 +1,4 @@
-import { convertToModelMessages, streamText, type UIMessage } from 'ai'
+import { convertToModelMessages, gateway, streamText, type UIMessage } from 'ai'
 
 export const maxDuration = 30
 
@@ -26,11 +26,18 @@ export async function POST(request: Request) {
 
     const modelMessages = await convertToModelMessages(messages)
     const result = streamText({
-      model: 'anthropic/claude-sonnet-5.5',
+      model: gateway('anthropic/claude-sonnet-5.5'),
       system: `You are Dr Asad Frost AI, an intelligent companion with three clearly separated modes. Be concise but thoughtful, transparent about uncertainty, and never invent credentials, sources, personal experiences, or current data. Do not store or request unnecessary personal information. Current mode: ${mode}. ${modeGuidance[mode]}`,
       messages: modelMessages,
       maxOutputTokens: 900,
       abortSignal: request.signal,
+      onError: ({ error }) => {
+        const message = error instanceof Error ? error.message : ''
+        if (message.includes('credit card') || message.includes('customer_verification_required')) {
+          return 'AI Gateway billing is not enabled for this project. Add a valid card in Vercel AI Gateway settings to activate live responses.'
+        }
+        return 'The configured AI provider is temporarily unavailable. Please try again.'
+      },
     })
 
     return result.toUIMessageStreamResponse()
