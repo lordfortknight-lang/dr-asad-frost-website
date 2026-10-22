@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.102",
     "@ai-sdk/react": "^4.0.147",
     "@base-ui/react": "^1.5.0",
     "@portabletext/react": "^8.0.1",
