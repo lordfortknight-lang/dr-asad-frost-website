@@ -32,7 +32,13 @@ export async function POST(request: Request) {
       messages: modelMessages,
       maxOutputTokens: 900,
       abortSignal: request.signal,
-      onError: () => 'The configured Gemini provider is temporarily unavailable. Please try again.',
+      onError: ({ error }) => {
+        const providerError = error as { statusCode?: number; status?: number; name?: string }
+        const status = providerError.statusCode ?? providerError.status
+        const category = status === 401 || status === 403 ? 'authentication_or_access' : status === 429 ? 'quota_or_rate_limit' : status && status >= 500 ? 'provider_unavailable' : 'provider_request_failed'
+        console.error('[ai] Gemini provider failure', { category, status: typeof status === 'number' ? status : 'unknown', name: providerError.name ?? 'unknown' })
+        return 'The AI provider returned an error. Please try again.'
+      },
     })
 
     return result.toUIMessageStreamResponse()
