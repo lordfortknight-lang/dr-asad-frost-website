@@ -1,5 +1,6 @@
 
 import Link from 'next/link'
+import { HeroOrb } from '@/components/hero-orb'
 import {
   ArrowDown,
   ArrowUpRight,
@@ -145,6 +146,7 @@ export async function HomeContent() {
               literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
+            <HeroOrb />
             <Link className="text-link" href="/#essays">
               Explore the journal <ArrowDown size={16} />
             </Link>
