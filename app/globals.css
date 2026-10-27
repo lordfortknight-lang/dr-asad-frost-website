@@ -22,8 +22,10 @@
 @media (prefers-reduced-motion: reduce) { .hero-orb, .hero-orb-core, .hero-orbit, .hero-orb-dot-one, .hero-orb-dot-two { animation: none; } .hero-orb { transition: none; } }
 
 .marquee {
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  padding: 1.1rem 0;
+  padding: 1.2rem 0 1.35rem;
   border-block: 1px solid color-mix(in srgb, currentColor 15%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
@@ -31,7 +33,9 @@
 .marquee-track {
   display: flex;
   width: max-content;
+  padding-top: 0.6rem;
   animation: marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
 }
 .marquee:hover .marquee-track {
   animation-play-state: paused;
@@ -41,6 +45,7 @@
   align-items: center;
   padding-left: 2.5rem;
   white-space: nowrap;
+  color: currentColor;
   font-family: var(--font-serif, Georgia, serif);
   font-style: italic;
   font-weight: 300;
@@ -58,6 +63,11 @@
 }
 @keyframes marquee {
   to { transform: translateX(-50%); }
+}
+@media (max-width: 640px) {
+  .marquee { padding-block: 1.1rem 1.25rem; }
+  .marquee-item { padding-left: 1.5rem; }
+  .marquee-dot { margin-left: 1.5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; flex-wrap: wrap; width: auto; }
