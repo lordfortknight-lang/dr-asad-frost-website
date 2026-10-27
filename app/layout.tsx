@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://dr-asad-frost-website.vercel.app'),
-  title: 'Dr Asad Frost — Writer. Scholar. Observer.',
+  title: 'Dr Asad Frost — Dentist, Writer & Creator',
   description: 'The independent literary practice and clinical knowledge platform of Dr Asad Frost: essays, scholarship, dentistry, and photographs.',
   generator: 'Next.js',
   icons: {

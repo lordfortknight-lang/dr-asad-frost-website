@@ -11,6 +11,8 @@ const modeGuidance: Record<Mode, string> = {
   mentor: `You provide calm, direct mentorship. Ask a clarifying question when context is missing, challenge weak reasoning respectfully, and offer practical steps without pretending to know the user's future or personal circumstances.`,
 }
 
+const FRIENDLY_ERROR = 'The AI companion is temporarily unavailable. Please try again.'
+
 function isMode(value: unknown): value is Mode {
   return value === 'dental' || value === 'markets' || value === 'mentor'
 }
@@ -37,12 +39,17 @@ export async function POST(request: Request) {
         const status = providerError.statusCode ?? providerError.status
         const category = status === 401 || status === 403 ? 'authentication_or_access' : status === 429 ? 'quota_or_rate_limit' : status && status >= 500 ? 'provider_unavailable' : 'provider_request_failed'
         console.error('[ai] Gemini provider failure', { category, status: typeof status === 'number' ? status : 'unknown', name: providerError.name ?? 'unknown' })
-        return 'The AI provider returned an error. Please try again.'
       },
     })
 
-    return result.toUIMessageStreamResponse()
-  } catch {
-    return Response.json({ error: 'The AI companion is temporarily unavailable. Please try again.' }, { status: 503 })
+    return result.toUIMessageStreamResponse({
+      onError: (error) => {
+        console.error('[AI UI stream error]', error)
+        return FRIENDLY_ERROR
+      },
+    })
+  } catch (error) {
+    console.error('[AI route error]', error)
+    return Response.json({ error: FRIENDLY_ERROR }, { status: 503 })
   }
 }
