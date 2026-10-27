@@ -1,11 +1,10 @@
 
 import Link from 'next/link'
-import { HeroOrb } from '@/components/hero-orb'
+import { Marquee } from '@/components/marquee'
 import {
   ArrowDown,
   ArrowUpRight,
   BookOpen,
-  Feather,
 } from 'lucide-react'
 import {
   sanityClient,
@@ -146,18 +145,25 @@ export async function HomeContent() {
               literature, science, culture and everyday life. A personal
               archive by Dr Asad Frost.
             </p>
-            <HeroOrb />
             <Link className="text-link" href="/#essays">
               Explore the journal <ArrowDown size={16} />
             </Link>
           </div>
 
-          <div className="hero-bottom">
-            <span className="scroll-label">
-              <Feather size={15} /> Notes from a curious mind
-            </span>
-            <span className="hero-note">Read slowly. Think deeply.</span>
-          </div>
+          <Marquee
+            words={[
+              'Dentistry',
+              'Poetry',
+              'Literature',
+              'Essays',
+              'Financial markets',
+              'Clinical stories',
+              'The art of observation',
+              'Notes from a curious mind',
+              'Read slowly',
+              'Think deeply',
+            ]}
+          />
         </section>
 
         <section id="explore" className="explore section-pad">
