@@ -1,10 +1,10 @@
 
 import Link from 'next/link'
+import Marquee from '@/components/Marquee'
 import {
   ArrowDown,
   ArrowUpRight,
   BookOpen,
-  Feather,
 } from 'lucide-react'
 import {
   sanityClient,
@@ -150,12 +150,7 @@ export async function HomeContent() {
             </Link>
           </div>
 
-          <div className="hero-bottom">
-            <span className="scroll-label">
-              <Feather size={15} /> Notes from a curious mind
-            </span>
-            <span className="hero-note">Read slowly. Think deeply.</span>
-          </div>
+          <Marquee />
         </section>
 
         <section id="explore" className="explore section-pad">

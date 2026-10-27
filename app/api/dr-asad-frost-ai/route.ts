@@ -1,3 +1,4 @@
+import { google } from '@ai-sdk/google'
 import { convertToModelMessages, streamText, type UIMessage } from 'ai'
 
 export const maxDuration = 30
@@ -28,13 +29,16 @@ export async function POST(request: Request) {
 
     const modelMessages = await convertToModelMessages(messages)
     const result = streamText({
-      model: 'anthropic/claude-sonnet-5.5',
+      model: google('gemini-2.5-flash'),
       system: `You are Dr Asad Frost AI, an intelligent companion with three clearly separated modes. Be concise but thoughtful, transparent about uncertainty, and never invent credentials, sources, personal experiences, or current data. Do not store or request unnecessary personal information. Current mode: ${mode}. ${modeGuidance[mode]}`,
       messages: modelMessages,
       maxOutputTokens: 900,
       abortSignal: request.signal,
       onError: ({ error }) => {
-        console.error('[AI stream error]', error)
+        const providerError = error as { statusCode?: number; status?: number; name?: string }
+        const status = providerError.statusCode ?? providerError.status
+        const category = status === 401 || status === 403 ? 'authentication_or_access' : status === 429 ? 'quota_or_rate_limit' : status && status >= 500 ? 'provider_unavailable' : 'provider_request_failed'
+        console.error('[ai] Gemini provider failure', { category, status: typeof status === 'number' ? status : 'unknown', name: providerError.name ?? 'unknown' })
       },
     })
 
