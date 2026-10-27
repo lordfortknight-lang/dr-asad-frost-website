@@ -1,6 +1,6 @@
 
 import Link from 'next/link'
-import { Marquee } from '@/components/marquee'
+import Marquee from '@/components/Marquee'
 import {
   ArrowDown,
   ArrowUpRight,
@@ -150,20 +150,7 @@ export async function HomeContent() {
             </Link>
           </div>
 
-          <Marquee
-            words={[
-              'Dentistry',
-              'Poetry',
-              'Literature',
-              'Essays',
-              'Financial markets',
-              'Clinical stories',
-              'The art of observation',
-              'Notes from a curious mind',
-              'Read slowly',
-              'Think deeply',
-            ]}
-          />
+          <Marquee />
         </section>
 
         <section id="explore" className="explore section-pad">
