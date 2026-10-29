@@ -1,5 +1,5 @@
 import s from "./Marquee.module.css";
-const W = ["A mind in pursuit of knowledge,", "a life in pursuit of meaning."];
+const W = ["A mind in pursuit of knowledge, a life in pursuit of meaning."];
 export default function Marquee({ words = W, speed = 60 }: { words?: string[]; speed?: number }) {
   const l = [...words, ...words, ...words, ...words];
   return (
