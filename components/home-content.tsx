@@ -150,8 +150,9 @@ export async function HomeContent() {
             </Link>
           </div>
 
-          <Marquee />
         </section>
+
+        <Marquee />
 
         <section id="explore" className="explore section-pad">
           <div className="section-heading">
