@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { PremiumEffects } from './premium-effects'
 import { LogoIntro } from './logo-intro'
+import Marquee from '@/components/Marquee'
 
 const nav = [
   ['Work', '/#work'],
@@ -152,6 +153,8 @@ export function SiteShell({
           </Link>
         </nav>
       </header>
+
+      <Marquee />
 
       {children}
 

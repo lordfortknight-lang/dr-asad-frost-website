@@ -1,6 +1,5 @@
 
 import Link from 'next/link'
-import Marquee from '@/components/Marquee'
 import {
   ArrowDown,
   ArrowUpRight,
@@ -151,8 +150,6 @@ export async function HomeContent() {
           </div>
 
         </section>
-
-        <Marquee />
 
         <section id="explore" className="explore section-pad">
           <div className="section-heading">
