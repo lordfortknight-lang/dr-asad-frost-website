@@ -782,7 +782,20 @@ button:focus-visible {
     box-shadow 250ms ease,
     translate 180ms ease;
 }
-
+/* fix: featured image crop + explore title wrap */
+.feature-image img {
+  aspect-ratio: 1672 / 941;
+  object-fit: contain;
+  height: auto;
+}
+@media (max-width: 700px) {
+  .explore-card-title {
+    font-size: clamp(1.05rem, 5.4vw, 1.7rem);
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: manual;
+  }
+}
 @media (hover: hover) and (pointer: fine) {
   .feature-image img:hover,
   .essay-photo img:hover {
