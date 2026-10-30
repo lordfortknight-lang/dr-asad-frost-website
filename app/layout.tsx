@@ -4,23 +4,13 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://dr-asad-frost-website.vercel.app'),
-  title: 'Dr Asad Frost — Dentist, Writer & Creator',
-  description: 'The independent literary practice and clinical knowledge platform of Dr Asad Frost: essays, scholarship, dentistry, and photographs.',
+  title: 'Dr Asad Frost: Dentist, Writer & Creator',
+  description: 'Essays, observations and ideas at the intersection of literature, science, culture and everyday life. A personal journal by Dr Asad Frost, dentist and writer.',
   generator: 'Next.js',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
     ],
     apple: '/apple-icon.png',
   },
