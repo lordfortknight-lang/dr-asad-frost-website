@@ -1,7 +1,9 @@
 'use client'
 
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, ChevronDown, ChevronUp, Grid2X2, Mail, Search, Smartphone, X } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, ChevronDown, ChevronUp, Grid2X2, Search, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import styles from './newsroom.module.css'
 
@@ -14,43 +16,38 @@ type Article = {
   tags?: string[]
   publishedAt?: string
   image?: { asset?: { url?: string }; alt?: string }
-  body?: Array<{ _type?: string; _key?: string; style?: string; children?: Array<{ text?: string }> }>
+  body?: unknown[]
 }
 
 const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-
 function formatDate(value?: string) {
   if (!value) return 'Undated'
   const date = new Date(value)
   return Number.isNaN(date.valueOf()) ? 'Undated' : dateFormatter.format(date)
 }
 
-function BlockContent({ article }: { article: Article }) {
-  return (
-    <div className={styles.articleBody}>
-      {article.body?.map((block, index) => {
-        if (block._type !== 'block') return null
-        const text = block.children?.map((child) => child.text || '').join('')
-        if (!text) return null
-        if (block.style === 'h2' || block.style === 'h3') {
-          return <h2 key={block._key || index}>{text}</h2>
-        }
-        return <p key={block._key || index}>{text}</p>
-      })}
-      {!article.body?.length && article.excerpt ? <p>{article.excerpt}</p> : null}
-    </div>
-  )
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => <p>{children}</p>,
+    h2: ({ children }) => <h2>{children}</h2>,
+    h3: ({ children }) => <h3>{children}</h3>,
+    blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+  },
+  list: { bullet: ({ children }) => <ul>{children}</ul>, number: ({ children }) => <ol>{children}</ol> },
+  marks: {
+    link: ({ children, value }) => <a href={value?.href} target={value?.blank ? '_blank' : undefined} rel={value?.blank ? 'noreferrer' : undefined}>{children}</a>,
+  },
+  types: {
+    image: ({ value }) => value?.asset?.url ? <Image src={value.asset.url} alt={value.alt || ''} width={1200} height={800} className={styles.bodyImage} /> : null,
+  },
 }
 
-function NewsroomHeader({ onClose, onBack }: { onClose?: () => void; onBack?: () => void }) {
+function NewsroomHeader({ reader, onClose }: { reader?: boolean; onClose: () => void }) {
   return (
     <header className={styles.windowHeader}>
-      <button className={styles.iconButton} onClick={onClose || onBack} aria-label={onClose ? 'Close newsroom' : 'Back to newsroom'}>
-        {onClose ? <X size={20} strokeWidth={1.5} /> : <ArrowLeft size={20} strokeWidth={1.5} />}
+      <button className={styles.iconButton} onClick={onClose} aria-label={reader ? 'Back to newsroom' : 'Close newsroom'}>
+        {reader ? <ArrowLeft size={19} strokeWidth={1.5} /> : <X size={19} strokeWidth={1.5} />}
       </button>
-      <Link className={styles.newsletterButton} href="/contact" aria-label="Get the newsletter">
-        <Mail size={17} strokeWidth={1.7} /> Get the newsletter
-      </Link>
       <div className={styles.windowTitle}>NEWSROOM</div>
     </header>
   )
@@ -58,14 +55,12 @@ function NewsroomHeader({ onClose, onBack }: { onClose?: () => void; onBack?: ()
 
 function NewsroomDock() {
   return (
-    <nav className={styles.dock} aria-label="Newsroom navigation">
-      <Link href="/" className={styles.dockArrow} aria-label="Go home"><ArrowLeft size={18} /></Link>
+    <nav className={styles.dock} aria-label="Site navigation">
       <Link href="/" className={styles.dockItem}><span className={styles.dockGlyph}>⌂</span><span>Home</span></Link>
-      <Link href="/newsroom" className={`${styles.dockItem} ${styles.active}`}><span className={styles.dockGlyph}><Grid2X2 size={22} /></span><span>Newsroom</span></Link>
+      <Link href="/newsroom" className={`${styles.dockItem} ${styles.active}`}><Grid2X2 size={19} /><span>Newsroom</span></Link>
       <Link href="/journal" className={styles.dockItem}><span className={styles.dockGlyph}>✦</span><span>Journal</span></Link>
       <Link href="/#about" className={styles.dockItem}><span className={styles.dockGlyph}>◎</span><span>About</span></Link>
-      <Link href="/contact" className={styles.dockItem}><span className={styles.dockGlyph}><Mail size={21} /></span><span>Contact</span></Link>
-      <span className={styles.dockArrow} aria-hidden="true"><ChevronDown size={18} /></span>
+      <Link href="/contact" className={styles.dockItem}><span className={styles.dockGlyph}>↗</span><span>Contact</span></Link>
     </nav>
   )
 }
@@ -77,48 +72,48 @@ export function Newsroom({ articles }: { articles: Article[] }) {
   const categories = useMemo(() => ['All', ...Array.from(new Set(articles.map((article) => article.category).filter(Boolean) as string[]))], [articles])
   const filtered = useMemo(() => articles.filter((article) => {
     const haystack = `${article.title} ${article.excerpt || ''} ${article.category || ''} ${(article.tags || []).join(' ')}`.toLowerCase()
-    return (category === 'All' || article.category === category) && haystack.includes(query.toLowerCase())
+    return (category === 'All' || article.category === category) && haystack.includes(query.trim().toLowerCase())
   }), [articles, category, query])
 
   return (
     <main className={styles.page}>
-      <div className={styles.topControls}>
-        <Link href="/contact" className={styles.retroButton}><span className={styles.palm}>✦</span> Become a member</Link>
-        <Link href="/ai" className={styles.retroButton}><Smartphone size={18} strokeWidth={1.6} /> Get the app</Link>
-      </div>
-      <div className={styles.desktopStack} aria-hidden="true"><span /><span /></div>
+      <div className={styles.ambientLabel}>DR ASAD FROST <span>/</span> SELECTED WRITING</div>
       <section className={styles.window} aria-label="Dr Asad Frost Newsroom">
         {selected ? (
           <>
-            <NewsroomHeader onBack={() => setSelected(null)} />
+            <NewsroomHeader reader onClose={() => setSelected(null)} />
             <article className={styles.reader}>
               <div className={styles.readerInner}>
-                <p className={styles.brandMark}>DR ASAD FROST / EDITORIAL</p>
-                <p className={styles.category}>{selected.category || 'Journal'} · {formatDate(selected.publishedAt)}</p>
+                <p className={styles.kicker}>{selected.category || 'Journal'} · {formatDate(selected.publishedAt)}</p>
                 <h1>{selected.title}</h1>
-                {selected.image?.asset?.url ? <img src={selected.image.asset.url} alt={selected.image.alt || selected.title} className={styles.featureImage} /> : null}
-                <BlockContent article={selected} />
-                <Link href={`/articles/${selected.slug?.current || ''}`} className={styles.readLink}>Open full article ↗</Link>
+                {selected.image?.asset?.url ? <Image src={selected.image.asset.url} alt={selected.image.alt || selected.title} width={1400} height={900} priority className={styles.featureImage} /> : null}
+                {selected.body?.length ? <div className={styles.articleBody}><PortableText value={selected.body as never} components={portableTextComponents} /></div> : selected.excerpt ? <div className={styles.articleBody}><p>{selected.excerpt}</p></div> : null}
+                {selected.slug?.current ? <Link href={`/articles/${selected.slug.current}`} className={styles.readLink}>Open full article <ArrowUpRight size={14} /></Link> : null}
               </div>
             </article>
           </>
         ) : (
           <>
-            <NewsroomHeader onClose={() => window.history.back()} />
+            <NewsroomHeader onClose={() => setSelected(null)} />
+            <div className={styles.directoryIntro}>
+              <p>Ideas, field notes and observations from the practice.</p>
+              <span>{articles.length.toString().padStart(2, '0')} published pieces</span>
+            </div>
             <div className={styles.directoryTools}>
-              <label className={styles.search}><Search size={16} /><span className="sr-only">Search articles</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the archive" /></label>
+              <label className={styles.search}><Search size={16} aria-hidden="true" /><span className="sr-only">Search articles</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the archive" /></label>
               <div className={styles.categories} aria-label="Filter by category">
-                {categories.map((item) => <button key={item} className={category === item ? styles.categoryActive : ''} onClick={() => setCategory(item)}>{item}</button>)}
+                {categories.map((item) => <button key={item} className={category === item ? styles.categoryActive : ''} onClick={() => setCategory(item)} aria-pressed={category === item}>{item}</button>)}
               </div>
             </div>
             <div className={styles.directory}>
-              {filtered.map((article) => (
+              {filtered.map((article, index) => (
                 <button className={styles.articleRow} key={article._id} onClick={() => setSelected(article)}>
-                  {article.image?.asset?.url ? <img src={article.image.asset.url} alt={article.image.alt || article.title} /> : <span className={styles.imagePlaceholder}>AF</span>}
-                  <span className={styles.articleMeta}><strong>{article.title}</strong><span>{formatDate(article.publishedAt)} <i>✦</i> {article.category || 'Essay'}</span><small>{article.excerpt || 'Read the latest from the archive.'}</small></span>
+                  <span className={styles.index}>{String(index + 1).padStart(2, '0')}</span>
+                  {article.image?.asset?.url ? <Image src={article.image.asset.url} alt={article.image.alt || article.title} width={420} height={300} sizes="(max-width: 600px) 34vw, 220px" /> : <span className={styles.imagePlaceholder}>AF</span>}
+                  <span className={styles.articleMeta}><strong>{article.title}</strong><span>{formatDate(article.publishedAt)} <i>·</i> {article.category || 'Essay'}</span><small>{article.excerpt || 'Read the latest from the archive.'}</small></span>
                 </button>
               ))}
-              {!filtered.length ? <div className={styles.empty}>No published articles match this view.</div> : null}
+              {!filtered.length ? <div className={styles.empty}><strong>No pieces found.</strong><span>Try another search or category.</span></div> : null}
             </div>
             <footer className={styles.windowFooter}><span>{filtered.length} of {articles.length} published articles</span><span className={styles.scrollHint}><ChevronUp size={14} /><ChevronDown size={14} /></span></footer>
           </>

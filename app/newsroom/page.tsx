@@ -4,7 +4,7 @@ import { Newsroom } from '@/components/newsroom/newsroom'
 
 export const metadata: Metadata = {
   title: 'Newsroom | Dr Asad Frost',
-  description: 'A retro editorial archive of essays, observations and ideas by Dr Asad Frost.',
+  description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
   alternates: { canonical: '/newsroom' },
 }
 
@@ -24,7 +24,7 @@ type Article = {
   tags?: string[]
   publishedAt?: string
   image?: SanityImage
-  body?: Array<{ _type?: string; _key?: string; style?: string; children?: Array<{ text?: string }> }>
+  body?: unknown[]
 }
 
 async function getArticles(): Promise<Article[]> {
