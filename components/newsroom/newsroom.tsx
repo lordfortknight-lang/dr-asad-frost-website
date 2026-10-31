@@ -48,9 +48,9 @@ function NewsroomHeader({ onClose, onBack }: { onClose?: () => void; onBack?: ()
       <button className={styles.iconButton} onClick={onClose || onBack} aria-label={onClose ? 'Close newsroom' : 'Back to newsroom'}>
         {onClose ? <X size={20} strokeWidth={1.5} /> : <ArrowLeft size={20} strokeWidth={1.5} />}
       </button>
-      <button className={styles.newsletterButton} type="button" aria-label="Get the newsletter">
+      <Link className={styles.newsletterButton} href="/contact" aria-label="Get the newsletter">
         <Mail size={17} strokeWidth={1.7} /> Get the newsletter
-      </button>
+      </Link>
       <div className={styles.windowTitle}>NEWSROOM</div>
     </header>
   )
