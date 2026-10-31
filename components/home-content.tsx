@@ -157,16 +157,17 @@ export async function HomeContent() {
               <span className="eyebrow">A considered archive</span>
               <h2 className="explore-title">Explore my <em>work.</em></h2>
             </div>
-            <span className="eyebrow explore-supporting-label">Six ways in</span>
+            <span className="eyebrow explore-supporting-label">Seven ways in</span>
           </div>
           <div className="explore-grid">
             {[
               ['01', 'Journal', 'Essays, observations and notes.', '/journal'],
-              ['02', 'Essays', 'Longer thoughts to sit with.', '/journal'],
-              ['03', 'Books', 'A growing reading room.', '/books'],
-              ['04', 'Magazine', 'Issues made for slow reading.', '/magazine'],
-              ['05', 'Achievements', 'Milestones and recognition.', '/#achievements'],
-              ['06', 'Patient work', 'Dental case histories and voices.', '/#patient-work'],
+              ['02', 'Newsroom', 'A retro editorial archive.', '/newsroom'],
+              ['03', 'Essays', 'Longer thoughts to sit with.', '/journal'],
+              ['04', 'Books', 'A growing reading room.', '/books'],
+              ['05', 'Magazine', 'Issues made for slow reading.', '/magazine'],
+              ['06', 'Achievements', 'Milestones and recognition.', '/#achievements'],
+              ['07', 'Patient work', 'Dental case histories and voices.', '/#patient-work'],
             ].map(([number, title, description, href]) => (
               <Link className="explore-card" href={href} key={title}>
                 <span className="explore-number">{number}</span>

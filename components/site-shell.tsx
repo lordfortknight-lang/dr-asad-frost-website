@@ -13,6 +13,7 @@ const nav = [
   ['Work', '/#work'],
   ['Clinical World', '/clinical-world'],
   ['Journal', '/journal'],
+  ['Newsroom', '/newsroom'],
   ['About', '/#about'],
   ['Achievements', '/achievements'],
   ['Milestones', '/milestones'],
