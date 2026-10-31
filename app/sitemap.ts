@@ -6,6 +6,7 @@ const siteUrl = 'https://www.asadfrost.in'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: siteUrl, changeFrequency: 'weekly', priority: 1 },
+    { url: `${siteUrl}/newsroom`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/journal`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/books`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${siteUrl}/magazine`, changeFrequency: 'weekly', priority: 0.8 },
