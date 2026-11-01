@@ -1,4 +1,4 @@
-
+import GalleryCorner from "@/app/gallery/GalleryCorner";
 import Link from 'next/link'
 import {
   ArrowDown,
