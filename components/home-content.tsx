@@ -519,6 +519,7 @@ export async function HomeContent() {
       <div className="mobile-bookmark">
         <BookOpen size={15} /> New writing, occasionally
       </div>
+      <GalleryCorner />
     </>
   )
 }
