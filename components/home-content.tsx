@@ -1,4 +1,3 @@
-import GalleryCorner from "@/app/gallery/GalleryCorner";
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -157,7 +156,7 @@ export async function HomeContent() {
               <span className="eyebrow">A considered archive</span>
               <h2 className="explore-title">Explore my <em>work.</em></h2>
             </div>
-            <span className="eyebrow explore-supporting-label">Seven ways in</span>
+            <span className="eyebrow explore-supporting-label">Eight ways in</span>
           </div>
           <div className="explore-grid">
             {[
@@ -168,6 +167,7 @@ export async function HomeContent() {
               ['05', 'Magazine', 'Issues made for slow reading.', '/magazine'],
               ['06', 'Achievements', 'Milestones and recognition.', '/#achievements'],
               ['07', 'Patient work', 'Dental case histories and voices.', '/#patient-work'],
+              ['08', 'Gallery', 'A walk through photographs.', '/gallery'],
             ].map(([number, title, description, href]) => (
               <Link className="explore-card" href={href} key={title}>
                 <span className="explore-number">{number}</span>
