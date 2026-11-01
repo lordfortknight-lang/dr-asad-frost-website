@@ -14,6 +14,7 @@ const nav = [
   ['Clinical World', '/clinical-world'],
   ['Journal', '/journal'],
   ['Newsroom', '/newsroom'],
+  ['Gallery', '/gallery'],
   ['About', '/#about'],
   ['Achievements', '/achievements'],
   ['Milestones', '/milestones'],
