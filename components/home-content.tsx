@@ -1,4 +1,3 @@
-import GalleryCorner from "@/app/gallery/GalleryCorner";
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -520,7 +519,6 @@ export async function HomeContent() {
       <div className="mobile-bookmark">
         <BookOpen size={15} /> New writing, occasionally
       </div>
-      <GalleryCorner />
     </>
   )
 }
