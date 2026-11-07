@@ -14,6 +14,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/milestones`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${siteUrl}/recognition`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${siteUrl}/contact`, changeFrequency: 'yearly', priority: 0.5 },
+    { url: `${siteUrl}/biography`, changeFrequency: 'yearly', priority: 0.8 },
+    { url: `${siteUrl}/gallery`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${siteUrl}/clinical-world`, changeFrequency: 'weekly', priority: 0.8 },
   ]
 
@@ -21,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const content = await sanityClient.fetch<Array<{ _type: string; slug?: { current?: string }; publishedAt?: string }>>(`*[
       _type in ["article", "magazineIssue"] &&
       defined(slug.current) &&
+      defined(publishedAt) &&
       !(_id in path("drafts.**"))
     ] { _type, slug, publishedAt }`)
     const clinical = await sanityClient.fetch<Array<{ slug: string; updatedAt?: string }>>(clinicalSlugsQuery)

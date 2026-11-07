@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Achievements | Dr Asad Frost',
   description:
     'Academic achievements, accomplishments and milestones of Dr Asad Frost.',
+  alternates: { canonical: '/achievements' },
 }
 
 export default function AchievementsPage() {

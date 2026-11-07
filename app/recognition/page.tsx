@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Recognition | Dr Asad Frost',
   description:
     'Awards, honours, publications and professional recognition of Dr Asad Frost.',
+  alternates: { canonical: '/recognition' },
 }
 
 export default function RecognitionPage() {

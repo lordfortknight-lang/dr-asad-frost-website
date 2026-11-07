@@ -1,6 +1,13 @@
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { sanityClient } from '@/lib/sanity'
+
+export const metadata: Metadata = {
+  title: 'Magazine | Dr Asad Frost',
+  description: 'Magazine issues and editorial projects by Dr Asad Frost.',
+  alternates: { canonical: '/magazine' },
+}
 
 export const revalidate = 0
 

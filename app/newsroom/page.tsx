@@ -30,7 +30,7 @@ type Article = {
 async function getArticles(): Promise<Article[]> {
   try {
     return await sanityClient.fetch(`
-      *[_type == "article" && defined(slug.current) && !(_id in path("drafts.**"))]
+      *[_type == "article" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**"))]
         | order(publishedAt desc, _createdAt desc) {
           _id, title, slug, excerpt, category, tags, publishedAt,
           "image": image { asset->{url}, alt }, body

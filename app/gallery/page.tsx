@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Gallery | Dr Asad Frost",
   description:
     "A walk through photographs: mountains, moments and life around the clinic.",
+  alternates: { canonical: '/gallery' },
 };
 
 export default function GalleryPage() {

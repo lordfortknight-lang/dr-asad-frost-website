@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: 'Contact | Dr Asad Frost',
   description:
     'Contact Dr Asad Frost for conversations, writing, collaborations and professional enquiries.',
+  alternates: { canonical: '/contact' },
 }
 
 const contactLinks = [

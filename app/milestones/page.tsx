@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Milestones | Dr Asad Frost',
   description:
     'Explore the personal, academic and professional milestones in the journey of Dr Asad Frost.',
+  alternates: { canonical: '/milestones' },
 }
 
 export default function MilestonesPage() {

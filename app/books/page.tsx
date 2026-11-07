@@ -1,7 +1,14 @@
 
 
+import type { Metadata } from 'next'
 import Link from "next/link";
 import { createClient } from "@sanity/client";
+
+export const metadata: Metadata = {
+  title: 'Books | Dr Asad Frost',
+  description: 'Books and longer works by Dr Asad Frost.',
+  alternates: { canonical: '/books' },
+}
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "n159dle8",
