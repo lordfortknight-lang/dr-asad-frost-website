@@ -33,7 +33,7 @@ async function getArticle(slug: string): Promise<Article | null> {
       excerpt,
       category,
       tags,
-      coalesce(author, "Dr Asad Frost") as author,
+      "author": coalesce(author, "Dr Asad Frost"),
       publishedAt,
       _updatedAt,
       "imageUrl": image.asset->url,

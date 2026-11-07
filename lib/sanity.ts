@@ -49,7 +49,7 @@ export const publishedArticlesQuery = `*[
   excerpt,
   category,
   tags,
-  coalesce(author, "Dr Asad Frost") as author,
+  "author": coalesce(author, "Dr Asad Frost"),
   publishedAt,
   _updatedAt,
   "image": image {
