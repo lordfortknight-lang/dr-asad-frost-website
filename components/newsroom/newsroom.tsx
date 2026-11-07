@@ -3,8 +3,9 @@
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ArrowLeft, ArrowUpRight, ChevronDown, ChevronUp, Grid2X2, Search, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styles from './newsroom.module.css'
 
 type Article = {
@@ -47,7 +48,7 @@ const portableTextComponents: PortableTextComponents = {
 function NewsroomHeader({ reader, onClose }: { reader?: boolean; onClose: () => void }) {
   return (
     <header className={styles.windowHeader}>
-      <button className={styles.iconButton} onClick={onClose} aria-label={reader ? 'Back to newsroom' : 'Close newsroom'}>
+      <button type="button" className={styles.iconButton} onClick={onClose} aria-label={reader ? 'Back to newsroom' : 'Close newsroom'}>
         {reader ? <ArrowLeft size={19} strokeWidth={1.5} /> : <X size={19} strokeWidth={1.5} />}
       </button>
       <div className={styles.windowTitle}>NEWSROOM</div>
@@ -71,11 +72,28 @@ export function Newsroom({ articles }: { articles: Article[] }) {
   const [selected, setSelected] = useState<Article | null>(null)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
+  const router = useRouter()
+  const closeNewsroom = () => router.push('/')
   const categories = useMemo(() => ['All', ...Array.from(new Set(articles.map((article) => article.category).filter(Boolean) as string[]))], [articles])
   const filtered = useMemo(() => articles.filter((article) => {
     const haystack = `${article.title} ${article.excerpt || ''} ${article.category || ''} ${(article.tags || []).join(' ')}`.toLowerCase()
     return (category === 'All' || article.category === category) && haystack.includes(query.trim().toLowerCase())
   }), [articles, category, query])
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Escape') return
+      event.preventDefault()
+      if (selected) {
+        setSelected(null)
+      } else {
+        closeNewsroom()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [router, selected])
 
   return (
     <main className={styles.page}>
@@ -96,7 +114,7 @@ export function Newsroom({ articles }: { articles: Article[] }) {
           </>
         ) : (
           <>
-            <NewsroomHeader onClose={() => setSelected(null)} />
+            <NewsroomHeader onClose={closeNewsroom} />
             <div className={styles.directoryIntro}>
               <p>Ideas, field notes and observations from the practice.</p>
               <span>{articles.length.toString().padStart(2, '0')} published pieces</span>
