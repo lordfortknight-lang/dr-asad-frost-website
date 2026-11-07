@@ -74,25 +74,31 @@
 @media (max-width: 600px) {
   .page {
     padding-block-start: calc(.75rem + env(safe-area-inset-top));
-    padding-block-end: calc(1rem + env(safe-area-inset-bottom));
+    padding-block-end: calc(.75rem + env(safe-area-inset-bottom));
+    min-height: 100dvh;
   }
 
   .ambientLabel {
-    margin-bottom: .7rem;
+    margin-bottom: .55rem;
   }
 
   .window {
-    max-height: calc(100dvh - 9.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: none;
     border-radius: .8rem;
   }
 
   .windowHeader {
-    min-height: 3.5rem;
-    padding: .35rem .5rem;
+    position: relative;
+    min-height: 3.25rem;
+    padding: .25rem .5rem;
   }
 
   .iconButton {
-    flex: 0 0 44px;
+    position: absolute;
+    left: .35rem;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
     padding: .5rem;
   }
 
@@ -102,8 +108,8 @@
 
   .directoryIntro {
     min-width: 0;
-    gap: .45rem;
-    padding: .85rem .75rem .7rem;
+    gap: .35rem;
+    padding: .7rem .75rem .55rem;
   }
 
   .directoryIntro p {
@@ -114,69 +120,94 @@
   }
 
   .directoryIntro span {
-    font-size: .58rem;
+    margin-top: .35rem;
+    font-size: .56rem;
   }
 
   .directoryTools {
     min-width: 0;
-    padding: 0 .75rem .65rem;
+    padding: 0 .75rem .55rem;
   }
 
   .search {
     min-width: 0;
     max-width: none;
-    margin-bottom: .55rem;
-    padding: .55rem 0;
+    margin-bottom: .35rem;
+    padding: .4rem 0;
   }
 
   .categories {
     min-width: 0;
     max-width: 100%;
-    overscroll-behavior-inline: contain;
+    flex-wrap: wrap;
+    gap: .35rem;
+    overflow: visible;
   }
 
   .categories button {
-    min-height: 40px;
+    min-height: 34px;
+    padding: .3rem .55rem;
   }
 
   .directory {
+    max-height: none;
+    overflow: visible;
     padding-inline: .75rem;
   }
 
   .articleRow {
-    grid-template-columns: 1.2rem minmax(5rem, 30vw) minmax(0, 1fr);
-    gap: .5rem;
-    padding: .8rem 0;
+    grid-template-columns: 1rem minmax(4.5rem, 24vw) minmax(0, 1fr);
+    gap: .4rem;
+    align-items: start;
+    padding: .55rem 0;
+  }
+
+  .articleRow img,
+  .imagePlaceholder {
+    aspect-ratio: 1.35;
   }
 
   .articleMeta {
     min-width: 0;
-    gap: .3rem;
+    gap: .2rem;
   }
 
   .articleTitle {
-    font-size: clamp(1rem, 4vw, 1.15rem);
-    line-height: 1.12;
+    font-size: clamp(.95rem, 4vw, 1.08rem);
+    line-height: 1.15;
   }
 
   .articleMeta span,
   .articleMeta small {
-    font-size: clamp(.56rem, 2.4vw, .63rem);
+    font-size: clamp(.56rem, 2.3vw, .62rem);
+    line-height: 1.4;
     overflow-wrap: anywhere;
   }
 
+  .articleMeta small {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: initial;
+  }
+
   .previewButton {
-    min-height: 32px;
+    min-height: 28px;
   }
 
   .windowFooter {
     flex: 0 0 auto;
     gap: .5rem;
-    padding: .65rem .75rem;
+    padding: .55rem .75rem;
+  }
+
+  .reader {
+    max-height: none;
+    overflow: visible;
   }
 
   .readerInner {
-    padding: 1.5rem 1rem 2rem;
+    padding: 1.25rem 1rem 1.75rem;
   }
 
   .kicker {
@@ -210,6 +241,7 @@
   }
 
   .dock {
-    margin-top: 1rem;
+    bottom: env(safe-area-inset-bottom);
+    margin-top: .75rem;
   }
 }
