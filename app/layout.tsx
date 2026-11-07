@@ -52,6 +52,7 @@ export default function RootLayout({
           '@context': 'https://schema.org',
           '@graph': [
             { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Dr Asad Frost', inLanguage: 'en', publisher: { '@id': `${siteUrl}/#person` }, about: { '@id': `${siteUrl}/#person` } },
+            { '@type': 'Person', '@id': `${siteUrl}/#person`, name: 'Dr Asad Frost', url: siteUrl },
           ],
         }) }} />
         {process.env.NODE_ENV === 'production' && <Analytics />}

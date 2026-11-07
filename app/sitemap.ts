@@ -19,31 +19,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/clinical-world`, changeFrequency: 'weekly', priority: 0.8 },
   ]
 
-  try {
-    const content = await sanityClient.fetch<Array<{ _type: string; slug?: { current?: string }; publishedAt?: string }>>(`*[
-      _type in ["article", "magazineIssue"] &&
-      defined(slug.current) &&
-      defined(publishedAt) &&
-      !(_id in path("drafts.**"))
-    ] { _type, slug, publishedAt }`)
-    const clinical = await sanityClient.fetch<Array<{ slug: string; updatedAt?: string }>>(clinicalSlugsQuery)
+  const content = await sanityClient.fetch<Array<{
+    _type: string
+    slug?: { current?: string }
+    publishedAt?: string
+    _updatedAt?: string
+  }>>(`*[
+    _type in ["article", "magazineIssue"] &&
+    defined(slug.current) &&
+    !(_id in path("drafts.**"))
+  ] { _type, slug, publishedAt, _updatedAt }`)
+  const clinical = await sanityClient.fetch<Array<{ slug: string; updatedAt?: string }>>(clinicalSlugsQuery)
 
-    return [
-      ...staticRoutes,
-      ...content.filter((item) => item.slug?.current).map((item) => ({
+  return [
+    ...staticRoutes,
+    ...content.filter((item) => item.slug?.current).map((item) => {
+      const lastModified = item._updatedAt || item.publishedAt
+      return {
         url: `${siteUrl}/${item._type === 'article' ? 'articles' : 'magazine'}/${item.slug!.current}`,
-        ...(item.publishedAt ? { lastModified: new Date(item.publishedAt) } : {}),
+        ...(lastModified ? { lastModified } : {}),
         changeFrequency: 'monthly' as const,
         priority: item._type === 'article' ? 0.7 : 0.6,
-      })),
-      ...clinical.map((item) => ({
-        url: `${siteUrl}/clinical-world/${item.slug}`,
-        lastModified: item.updatedAt,
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-      })),
-    ]
-  } catch {
-    return staticRoutes
-  }
+      }
+    }),
+    ...clinical.map((item) => ({
+      url: `${siteUrl}/clinical-world/${item.slug}`,
+      ...(item.updatedAt ? { lastModified: item.updatedAt } : {}),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+  ]
 }

@@ -14,7 +14,9 @@ type Article = {
   excerpt?: string
   category?: string
   tags?: string[]
+  author?: string
   publishedAt?: string
+  _updatedAt?: string
   image?: { asset?: { url?: string }; alt?: string }
   body?: unknown[]
 }
@@ -84,7 +86,7 @@ export function Newsroom({ articles }: { articles: Article[] }) {
             <NewsroomHeader reader onClose={() => setSelected(null)} />
             <article className={styles.reader}>
               <div className={styles.readerInner}>
-                <p className={styles.kicker}>{selected.category || 'Journal'} · {formatDate(selected.publishedAt)}</p>
+                <p className={styles.kicker}>{selected.category || 'Journal'} · {formatDate(selected.publishedAt)} · By {selected.author || 'Dr Asad Frost'}</p>
                 <h1>{selected.title}</h1>
                 {selected.image?.asset?.url ? <Image src={selected.image.asset.url} alt={selected.image.alt || selected.title} width={1400} height={900} priority className={styles.featureImage} /> : null}
                 {selected.body?.length ? <div className={styles.articleBody}><PortableText value={selected.body as never} components={portableTextComponents} /></div> : selected.excerpt ? <div className={styles.articleBody}><p>{selected.excerpt}</p></div> : null}
@@ -107,11 +109,16 @@ export function Newsroom({ articles }: { articles: Article[] }) {
             </div>
             <div className={styles.directory}>
               {filtered.map((article, index) => (
-                <button className={styles.articleRow} key={article._id} onClick={() => setSelected(article)}>
+                <article className={styles.articleRow} key={article._id}>
                   <span className={styles.index}>{String(index + 1).padStart(2, '0')}</span>
                   {article.image?.asset?.url ? <Image src={article.image.asset.url} alt={article.image.alt || article.title} width={420} height={300} sizes="(max-width: 600px) 34vw, 220px" /> : <span className={styles.imagePlaceholder}>AF</span>}
-                  <span className={styles.articleMeta}><strong>{article.title}</strong><span>{formatDate(article.publishedAt)} <i>·</i> {article.category || 'Essay'}</span><small>{article.excerpt || 'Read the latest from the archive.'}</small></span>
-                </button>
+                  <span className={styles.articleMeta}>
+                    <Link href={article.slug?.current ? `/articles/${article.slug.current}` : '/newsroom'} className={styles.articleTitle}>{article.title}</Link>
+                    <span>{formatDate(article.publishedAt)} <i>·</i> By {article.author || 'Dr Asad Frost'} <i>·</i> {article.category || 'Essay'}</span>
+                    <small>{article.excerpt || 'Read the latest from the archive.'}</small>
+                    <button className={styles.previewButton} onClick={() => setSelected(article)}>Quick preview</button>
+                  </span>
+                </article>
               ))}
               {!filtered.length ? <div className={styles.empty}><strong>No pieces found.</strong><span>Try another search or category.</span></div> : null}
             </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { sanityClient } from '@/lib/sanity'
+import { publishedArticlesQuery, sanityClient } from '@/lib/sanity'
 import { Newsroom } from '@/components/newsroom/newsroom'
 
 export const metadata: Metadata = {
@@ -33,23 +33,15 @@ type Article = {
   excerpt?: string
   category?: string
   tags?: string[]
+  author?: string
   publishedAt?: string
+  _updatedAt?: string
   image?: SanityImage
   body?: unknown[]
 }
 
 async function getArticles(): Promise<Article[]> {
-  try {
-    return await sanityClient.fetch(`
-      *[_type == "article" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**"))]
-        | order(publishedAt desc, _createdAt desc) {
-          _id, title, slug, excerpt, category, tags, publishedAt,
-          "image": image { asset->{url}, alt }, body
-        }
-    `)
-  } catch {
-    return []
-  }
+  return sanityClient.fetch(publishedArticlesQuery)
 }
 
 export default async function NewsroomPage() {

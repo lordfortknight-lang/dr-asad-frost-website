@@ -38,6 +38,27 @@ export const contentQuery = `*[
   )
 }`;
 
+export const publishedArticlesQuery = `*[
+  _type == "article" &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  slug,
+  excerpt,
+  category,
+  tags,
+  coalesce(author, "Dr Asad Frost") as author,
+  publishedAt,
+  _updatedAt,
+  "image": image {
+    asset->{url},
+    alt
+  },
+  body
+}`;
+
 export const booksQuery = `*[_type == "book" && !(_id in path("drafts.**"))] | order(title asc) {
   _id,
   title,

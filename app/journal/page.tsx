@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { sanityClient } from '@/lib/sanity'
+import { publishedArticlesQuery, sanityClient } from '@/lib/sanity'
 
 export const metadata: Metadata = {
   title: 'Journal | Dr Asad Frost',
@@ -24,27 +24,20 @@ type Article = {
   title: string
   excerpt?: string
   category?: string
+  author?: string
+  publishedAt?: string
   slug?: { current: string }
   imageUrl?: string
   imageAlt?: string
 }
 
 async function getArticles(): Promise<Article[]> {
-  try {
-    return await sanityClient.fetch(`
-      *[_type == "article" && defined(slug.current) && !(_id in path("drafts.**"))] | order(publishedAt desc) {
-        _id,
-        title,
-        excerpt,
-        category,
-        slug,
-        "imageUrl": image.asset->url,
-        "imageAlt": image.alt
-      }
-    `)
-  } catch {
-    return []
-  }
+  const articles = await sanityClient.fetch<Array<Article & { image?: { asset?: { url?: string }; alt?: string } }>>(publishedArticlesQuery)
+  return articles.map((article) => ({
+    ...article,
+    imageUrl: article.image?.asset?.url,
+    imageAlt: article.image?.alt,
+  }))
 }
 
 export const revalidate = 0
@@ -67,6 +60,9 @@ export default async function JournalPage() {
           <p className="mt-4 max-w-2xl leading-7 text-[#715d58]">
             Essays, observations and ideas at the intersection of literature, science, culture and everyday life.
           </p>
+          <Link href="/newsroom" className="mt-5 inline-block text-sm font-medium text-[#8b5e3c] hover:underline">
+            Browse the searchable Newsroom archive →
+          </Link>
         </header>
 
         {articles.length === 0 ? (
@@ -85,7 +81,13 @@ export default async function JournalPage() {
                 ) : null}
                 <div className="p-6">
                   <p className="text-xs uppercase tracking-[0.2em] text-[#a77b45]">{article.category || 'Journal'}</p>
-                  <h2 className="mt-3 font-serif text-2xl font-semibold">{article.title}</h2>
+                  <h2 className="mt-3 font-serif text-2xl font-semibold">
+                    <Link href={`/articles/${article.slug?.current}`} className="hover:underline">{article.title}</Link>
+                  </h2>
+                  <p className="mt-2 text-sm text-[#8b5e3c]">
+                    By {article.author || 'Dr Asad Frost'}
+                    {article.publishedAt ? ` · ${new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.publishedAt))}` : ' · Publication date not provided'}
+                  </p>
                   {article.excerpt && <p className="mt-4 line-clamp-3 leading-7 text-[#715d58]">{article.excerpt}</p>}
                   <Link href={`/articles/${article.slug?.current}`} className="mt-6 inline-block rounded-full bg-[#652d36] px-5 py-3 text-sm font-medium text-white hover:bg-[#4c2028]">
                     Read essay
