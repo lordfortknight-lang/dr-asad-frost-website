@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   title: 'Magazine | Dr Asad Frost',
   description: 'Magazine issues and editorial projects by Dr Asad Frost.',
   alternates: { canonical: '/magazine' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/magazine',
+    title: 'Magazine | Dr Asad Frost',
+    description: 'Magazine issues and editorial projects by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Magazine | Dr Asad Frost',
+    description: 'Magazine issues and editorial projects by Dr Asad Frost.',
+  },
 }
 
 export const revalidate = 0

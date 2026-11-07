@@ -8,6 +8,17 @@ export const metadata: Metadata = {
   description:
     'Explore the personal, academic and professional milestones in the journey of Dr Asad Frost.',
   alternates: { canonical: '/milestones' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/milestones',
+    title: 'Milestones | Dr Asad Frost',
+    description: 'Explore the personal, academic and professional milestones in the journey of Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Milestones | Dr Asad Frost',
+    description: 'Explore the personal, academic and professional milestones in the journey of Dr Asad Frost.',
+  },
 }
 
 export default function MilestonesPage() {

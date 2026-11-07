@@ -13,6 +13,17 @@ export const metadata: Metadata = {
   description:
     'Contact Dr Asad Frost for conversations, writing, collaborations and professional enquiries.',
   alternates: { canonical: '/contact' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/contact',
+    title: 'Contact | Dr Asad Frost',
+    description: 'Contact Dr Asad Frost for conversations, writing, collaborations and professional enquiries.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Contact | Dr Asad Frost',
+    description: 'Contact Dr Asad Frost for conversations, writing, collaborations and professional enquiries.',
+  },
 }
 
 const contactLinks = [

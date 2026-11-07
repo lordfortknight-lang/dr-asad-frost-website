@@ -51,8 +51,7 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@graph': [
-            { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Dr Asad Frost', inLanguage: 'en' },
-            { '@type': 'Person', '@id': `${siteUrl}/#person`, name: 'Dr Asad Frost', url: `${siteUrl}/biography`, mainEntityOfPage: `${siteUrl}/biography` },
+            { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: siteUrl, name: 'Dr Asad Frost', inLanguage: 'en', publisher: { '@id': `${siteUrl}/#person` }, about: { '@id': `${siteUrl}/#person` } },
           ],
         }) }} />
         {process.env.NODE_ENV === 'production' && <Analytics />}

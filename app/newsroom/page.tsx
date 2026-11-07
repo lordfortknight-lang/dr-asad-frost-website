@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: 'Newsroom | Dr Asad Frost',
   description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
   alternates: { canonical: '/newsroom' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/newsroom',
+    title: 'Newsroom | Dr Asad Frost',
+    description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Newsroom | Dr Asad Frost',
+    description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
+  },
 }
 
 export const revalidate = 0

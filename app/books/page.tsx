@@ -8,6 +8,17 @@ export const metadata: Metadata = {
   title: 'Books | Dr Asad Frost',
   description: 'Books and longer works by Dr Asad Frost.',
   alternates: { canonical: '/books' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/books',
+    title: 'Books | Dr Asad Frost',
+    description: 'Books and longer works by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Books | Dr Asad Frost',
+    description: 'Books and longer works by Dr Asad Frost.',
+  },
 }
 
 const client = createClient({

@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: 'Journal | Dr Asad Frost',
   description: 'Essays, observations and ideas by Dr Asad Frost.',
   alternates: { canonical: '/journal' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/journal',
+    title: 'Journal | Dr Asad Frost',
+    description: 'Essays, observations and ideas by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Journal | Dr Asad Frost',
+    description: 'Essays, observations and ideas by Dr Asad Frost.',
+  },
 }
 
 type Article = {
