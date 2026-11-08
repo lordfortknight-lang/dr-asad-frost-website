@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { sanityClient } from '@/lib/sanity'
+import { magazinesQuery, sanityClient } from '@/lib/sanity'
 
 export const metadata: Metadata = {
   title: 'Magazine | Dr Asad Frost',
@@ -27,17 +27,25 @@ type Magazine = {
   title: string
   issueNumber?: string
   publishedAt?: string
+  tags?: string[]
   description?: string
   slug?: { current: string }
   image?: { asset?: { url?: string }; alt?: string }
   pdf?: { asset?: { url?: string } }
 }
 
-const magazinesQuery = `*[_type == "magazineIssue" && defined(slug.current) && !(_id in path("drafts.**"))] | order(publishedAt desc) {
-  _id, title, issueNumber, publishedAt, description, slug,
-  "image": image { "asset": asset->{url}, alt },
-  "pdf": pdf { "asset": asset->{url} }
-}`
+function formatDate(value?: string) {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.valueOf())
+    ? null
+    : new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(date)
+}
 
 export default async function MagazinePage() {
   const magazines: Magazine[] = await sanityClient.fetch(magazinesQuery)
@@ -70,16 +78,23 @@ export default async function MagazinePage() {
                 />
               )}
 
-              <p style={{ color: '#806d61' }}>
-                {magazine.issueNumber || 'MAGAZINE ISSUE'}
-                {magazine.publishedAt && ` · ${magazine.publishedAt}`}
-              </p>
+              {(magazine.issueNumber || formatDate(magazine.publishedAt)) && (
+                <p style={{ color: '#806d61' }}>
+                  {[magazine.issueNumber, formatDate(magazine.publishedAt)].filter(Boolean).join(' · ')}
+                </p>
+              )}
 
               <h2 style={{ fontSize: 25 }}>{magazine.title}</h2>
 
               {magazine.description && (
                 <p style={{ lineHeight: 1.7 }}>{magazine.description}</p>
               )}
+
+              {magazine.tags?.length ? (
+                <p style={{ fontSize: 14, color: '#806d61' }}>
+                  {magazine.tags.join(' · ')}
+                </p>
+              ) : null}
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 20 }}>
                 {magazine.slug?.current && (

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { publishedArticlesQuery, sanityClient } from '@/lib/sanity'
 
@@ -24,6 +25,7 @@ type Article = {
   title: string
   excerpt?: string
   category?: string
+  tags?: string[]
   author?: string
   publishedAt?: string
   slug?: { current: string }
@@ -41,6 +43,19 @@ async function getArticles(): Promise<Article[]> {
 }
 
 export const revalidate = 0
+
+function formatDate(value?: string) {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.valueOf())
+    ? null
+    : new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(date)
+}
 
 export default async function JournalPage() {
   const articles = await getArticles()
@@ -77,18 +92,32 @@ export default async function JournalPage() {
             {articles.map((article) => (
               <article key={article._id} className="overflow-hidden rounded-2xl border border-[#e6d9c9] bg-white shadow-sm">
                 {article.imageUrl ? (
-                  <img src={article.imageUrl} alt={article.imageAlt || article.title} className="h-56 w-full object-cover" />
+                  <Image
+                    src={article.imageUrl}
+                    alt={article.imageAlt || article.title}
+                    width={800}
+                    height={560}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="h-56 w-full object-cover"
+                  />
                 ) : null}
                 <div className="p-6">
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#a77b45]">{article.category || 'Journal'}</p>
+                  {article.category && (
+                    <p className="text-xs uppercase tracking-[0.2em] text-[#a77b45]">{article.category}</p>
+                  )}
                   <h2 className="mt-3 font-serif text-2xl font-semibold">
                     <Link href={`/articles/${article.slug?.current}`} className="hover:underline">{article.title}</Link>
                   </h2>
                   <p className="mt-2 text-sm text-[#8b5e3c]">
                     By {article.author || 'Dr Asad Frost'}
-                    {article.publishedAt ? ` · ${new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.publishedAt))}` : ' · Publication date not provided'}
+                    {formatDate(article.publishedAt) ? ` · ${formatDate(article.publishedAt)}` : ''}
                   </p>
                   {article.excerpt && <p className="mt-4 line-clamp-3 leading-7 text-[#715d58]">{article.excerpt}</p>}
+                  {article.tags?.length ? (
+                    <p className="mt-3 text-xs text-[#8b5e3c]">
+                      {article.tags.join(' · ')}
+                    </p>
+                  ) : null}
                   <Link href={`/articles/${article.slug?.current}`} className="mt-6 inline-block rounded-full bg-[#652d36] px-5 py-3 text-sm font-medium text-white hover:bg-[#4c2028]">
                     Read essay
                   </Link>

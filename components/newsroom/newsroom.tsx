@@ -22,11 +22,16 @@ type Article = {
   body?: unknown[]
 }
 
-const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
 function formatDate(value?: string) {
-  if (!value) return 'Undated'
+  if (!value) return null
   const date = new Date(value)
-  return Number.isNaN(date.valueOf()) ? 'Undated' : dateFormatter.format(date)
+  return Number.isNaN(date.valueOf()) ? null : dateFormatter.format(date)
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -104,9 +109,20 @@ export function Newsroom({ articles }: { articles: Article[] }) {
             <NewsroomHeader reader onClose={() => setSelected(null)} />
             <article className={styles.reader}>
               <div className={styles.readerInner}>
-                <p className={styles.kicker}>{selected.category || 'Journal'} · {formatDate(selected.publishedAt)} · By {selected.author || 'Dr Asad Frost'}</p>
+                <p className={styles.kicker}>
+                  {[selected.category, formatDate(selected.publishedAt)].filter(Boolean).join(' · ')}
+                  {[selected.category, formatDate(selected.publishedAt)].some(Boolean) ? ' · ' : ''}
+                  {selected.author === 'Dr Asad Frost' || !selected.author ? (
+                    <Link href="/biography" style={{ color: 'inherit' }}>
+                      By {selected.author || 'Dr Asad Frost'}
+                    </Link>
+                  ) : `By ${selected.author}`}
+                </p>
                 <h1>{selected.title}</h1>
                 {selected.image?.asset?.url ? <Image src={selected.image.asset.url} alt={selected.image.alt || selected.title} width={1400} height={900} priority className={styles.featureImage} /> : null}
+                {selected.tags?.length ? (
+                  <p className={styles.kicker}>{selected.tags.join(' · ')}</p>
+                ) : null}
                 {selected.body?.length ? <div className={styles.articleBody}><PortableText value={selected.body as never} components={portableTextComponents} /></div> : selected.excerpt ? <div className={styles.articleBody}><p>{selected.excerpt}</p></div> : null}
                 {selected.slug?.current ? <Link href={`/articles/${selected.slug.current}`} className={styles.readLink}>Open full article <ArrowUpRight size={14} /></Link> : null}
               </div>
@@ -132,8 +148,9 @@ export function Newsroom({ articles }: { articles: Article[] }) {
                   {article.image?.asset?.url ? <Image src={article.image.asset.url} alt={article.image.alt || article.title} width={420} height={300} sizes="(max-width: 600px) 34vw, 220px" /> : <span className={styles.imagePlaceholder}>AF</span>}
                   <span className={styles.articleMeta}>
                     <Link href={article.slug?.current ? `/articles/${article.slug.current}` : '/newsroom'} className={styles.articleTitle}>{article.title}</Link>
-                    <span>{formatDate(article.publishedAt)} <i>·</i> By {article.author || 'Dr Asad Frost'} <i>·</i> {article.category || 'Essay'}</span>
+                    <span>{[formatDate(article.publishedAt), `By ${article.author || 'Dr Asad Frost'}`, article.category].filter(Boolean).join(' · ')}</span>
                     <small>{article.excerpt || 'Read the latest from the archive.'}</small>
+                    {article.tags?.length ? <small>Topics: {article.tags.join(' · ')}</small> : null}
                     <button className={styles.previewButton} onClick={() => setSelected(article)}>Quick preview</button>
                   </span>
                 </article>

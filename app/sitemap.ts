@@ -1,5 +1,9 @@
 import type { MetadataRoute } from 'next'
-import { clinicalSlugsQuery, sanityClient } from '@/lib/sanity'
+import {
+  clinicalSlugsQuery,
+  sanityClient,
+  sitemapContentQuery,
+} from '@/lib/sanity'
 
 const siteUrl = 'https://www.asadfrost.in'
 
@@ -20,24 +24,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   const content = await sanityClient.fetch<Array<{
-    _type: string
-    slug?: { current?: string }
-    publishedAt?: string
-    _updatedAt?: string
-  }>>(`*[
-    _type in ["article", "magazineIssue"] &&
-    defined(slug.current) &&
-    !(_id in path("drafts.**"))
-  ] { _type, slug, publishedAt, _updatedAt }`)
+    _type: 'article' | 'book' | 'magazineIssue'
+    slug?: string
+    lastModified?: string
+  }>>(sitemapContentQuery)
   const clinical = await sanityClient.fetch<Array<{ slug: string; updatedAt?: string }>>(clinicalSlugsQuery)
+  const contentPaths = {
+    article: 'articles',
+    book: 'books',
+    magazineIssue: 'magazine',
+  } as const
 
   return [
     ...staticRoutes,
-    ...content.filter((item) => item.slug?.current).map((item) => {
-      const lastModified = item._updatedAt || item.publishedAt
+    ...content.flatMap((item) => {
+      if (!item.slug) return []
       return {
-        url: `${siteUrl}/${item._type === 'article' ? 'articles' : 'magazine'}/${item.slug!.current}`,
-        ...(lastModified ? { lastModified } : {}),
+        url: `${siteUrl}/${contentPaths[item._type]}/${item.slug}`,
+        ...(item.lastModified ? { lastModified: item.lastModified } : {}),
         changeFrequency: 'monthly' as const,
         priority: item._type === 'article' ? 0.7 : 0.6,
       }

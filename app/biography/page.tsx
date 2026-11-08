@@ -31,12 +31,6 @@ export default function BiographyPage() {
         mainEntity: { '@id': `${siteUrl}/#person` },
       },
       {
-        '@type': 'Person',
-        '@id': `${siteUrl}/#person`,
-        name: 'Dr Asad Frost',
-        url: `${siteUrl}/biography`,
-      },
-      {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },

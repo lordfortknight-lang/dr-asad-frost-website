@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { publishedArticlesQuery, sanityClient } from '@/lib/sanity'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { notFound } from 'next/navigation'
+import {
+  articleBySlugQuery,
+  relatedArticlesQuery,
+  sanityClient,
+} from '@/lib/sanity'
 
 const siteUrl = 'https://www.asadfrost.in'
 
@@ -10,38 +15,28 @@ export const revalidate = 0
 
 type Article = {
   title: string
+  slug?: { current?: string }
   excerpt?: string
   category?: string
   tags?: string[]
   author: string
   publishedAt?: string
   _updatedAt?: string
-  imageUrl?: string
-  imageAlt?: string
-  body?: Array<{ _key?: string; _type: string; style?: string; children?: Array<{ text?: string }> }>
+  image?: {
+    asset?: { url?: string }
+    alt?: string
+    caption?: string
+  }
+  body?: unknown[]
+}
+
+type RelatedArticle = {
+  title: string
+  slug?: { current?: string }
 }
 
 type Props = {
   params: Promise<{ slug: string }>
-}
-
-async function getArticle(slug: string): Promise<Article | null> {
-  return sanityClient.fetch(
-    `*[_type == "article" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
-      _id,
-      title,
-      excerpt,
-      category,
-      tags,
-      "author": coalesce(author, "Dr Asad Frost"),
-      publishedAt,
-      _updatedAt,
-      "imageUrl": image.asset->url,
-      "imageAlt": image.alt,
-      body
-    }`,
-    { slug },
-  )
 }
 
 function formatDate(value?: string) {
@@ -49,93 +44,139 @@ function formatDate(value?: string) {
   const date = new Date(value)
   return Number.isNaN(date.valueOf())
     ? null
-    : new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date)
+    : new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(date)
+}
+
+const portableTextComponents: PortableTextComponents = {
+  types: {
+    image: ({ value }) => value?.asset?.url ? (
+      <figure style={{ margin: '28px 0' }}>
+        <Image
+          src={value.asset.url}
+          alt={value.alt || ''}
+          width={1200}
+          height={800}
+          sizes="(max-width: 760px) 100vw, 760px"
+          style={{ width: '100%', height: 'auto' }}
+        />
+        {value.caption && (
+          <figcaption style={{ marginTop: 8, fontSize: 14 }}>
+            {value.caption}
+          </figcaption>
+        )}
+      </figure>
+    ) : null,
+  },
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const article = await getArticle(slug)
+  const article = await sanityClient.fetch<Article | null>(articleBySlugQuery, { slug })
   if (!article) return {}
+
+  const canonicalSlug = article.slug?.current || slug
+  const articleUrl = `${siteUrl}/articles/${canonicalSlug}`
+  const description = article.excerpt || `Read ${article.title} in the Dr Asad Frost archive.`
+  const imageUrl = article.image?.asset?.url
 
   return {
     title: `${article.title} | Dr Asad Frost`,
-    description: article.excerpt || `Read ${article.title} in the Dr Asad Frost archive.`,
-    alternates: { canonical: `/articles/${slug}` },
+    description,
+    alternates: { canonical: `/articles/${canonicalSlug}` },
     openGraph: {
       type: 'article',
-      url: `${siteUrl}/articles/${slug}`,
+      url: articleUrl,
       title: article.title,
-      description: article.excerpt,
-      publishedTime: article.publishedAt,
-      modifiedTime: article._updatedAt || article.publishedAt,
+      description,
+      ...(article.publishedAt ? { publishedTime: article.publishedAt } : {}),
+      ...(article._updatedAt ? { modifiedTime: article._updatedAt } : {}),
       authors: [article.author],
-      images: article.imageUrl ? [{ url: article.imageUrl, alt: article.imageAlt || article.title }] : undefined,
+      ...(imageUrl
+        ? { images: [{ url: imageUrl, alt: article.image?.alt || article.title }] }
+        : {}),
     },
     twitter: {
-      card: article.imageUrl ? 'summary_large_image' : 'summary',
+      card: imageUrl ? 'summary_large_image' : 'summary',
       title: article.title,
-      description: article.excerpt,
-      images: article.imageUrl ? [article.imageUrl] : undefined,
+      description,
+      ...(imageUrl ? { images: [imageUrl] } : {}),
     },
   }
 }
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params
-  const article = await getArticle(slug)
+  const article = await sanityClient.fetch<Article | null>(articleBySlugQuery, { slug })
   if (!article) notFound()
 
-  const candidates = await sanityClient.fetch<Array<{
-    title: string
-    slug?: { current?: string }
-    category?: string
-    tags?: string[]
-    publishedAt?: string
-  }>>(
-    `*[_type == "article" && slug.current != $slug && defined(slug.current) && !(_id in path("drafts.**"))] {
-      title, slug, category, tags, publishedAt
-    }`,
-    { slug },
-  )
-  const relatedArticles = candidates
-    .map((candidate) => {
-      const sharedTags = (article.tags || []).filter((tag) => candidate.tags?.includes(tag)).length
-      const sameCategory = Boolean(article.category && candidate.category === article.category)
-      return { ...candidate, relevance: sharedTags + (sameCategory ? 1 : 0) }
-    })
-    .filter((candidate) => candidate.relevance > 0)
-    .sort((a, b) => b.relevance - a.relevance || (b.publishedAt || '').localeCompare(a.publishedAt || ''))
-    .slice(0, 3)
-
+  const canonicalSlug = article.slug?.current || slug
+  const articleUrl = `${siteUrl}/articles/${canonicalSlug}`
+  const articleId = `${articleUrl}#article`
+  const webpageId = `${articleUrl}#webpage`
+  const breadcrumbId = `${articleUrl}#breadcrumb`
+  const relatedArticles = article.category || article.tags?.length
+    ? await sanityClient.fetch<RelatedArticle[]>(relatedArticlesQuery, {
+        slug: canonicalSlug,
+        category: article.category || null,
+        tags: article.tags || [],
+      })
+    : []
   const datePublished = formatDate(article.publishedAt)
-  const dateModified = formatDate(article._updatedAt) || datePublished
-  const keywords = Array.from(new Set([article.category, ...(article.tags || [])].filter(Boolean)))
+  const dateModified = formatDate(article._updatedAt)
+  const keywords = Array.from(new Set([
+    ...(article.category ? [article.category] : []),
+    ...(article.tags || []),
+  ]))
+  const imageUrl = article.image?.asset?.url
   const articleSchema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'Article',
-        '@id': `${siteUrl}/articles/${slug}#article`,
-        mainEntityOfPage: `${siteUrl}/articles/${slug}`,
+        '@id': articleId,
+        mainEntityOfPage: { '@id': webpageId },
         headline: article.title,
-        description: article.excerpt,
-        datePublished: article.publishedAt,
-        dateModified: article._updatedAt || article.publishedAt,
-        articleSection: article.category,
-        keywords,
-        author: {
-          '@type': 'Person',
-          '@id': article.author === 'Dr Asad Frost' ? `${siteUrl}/#person` : undefined,
-          name: article.author,
-        },
-        image: article.imageUrl ? [article.imageUrl] : undefined,
+        ...(article.excerpt ? { description: article.excerpt } : {}),
+        ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
+        ...(article._updatedAt ? { dateModified: article._updatedAt } : {}),
+        ...(article.category ? { articleSection: article.category } : {}),
+        ...(keywords.length ? { keywords } : {}),
+        author: article.author === 'Dr Asad Frost'
+          ? { '@id': `${siteUrl}/#person` }
+          : { '@type': 'Person', name: article.author },
+        ...(imageUrl
+          ? {
+              image: [{
+                '@type': 'ImageObject',
+                url: imageUrl,
+                ...(article.image?.alt ? { description: article.image.alt } : {}),
+                ...(article.image?.caption ? { caption: article.image.caption } : {}),
+              }],
+            }
+          : {}),
+      },
+      {
+        '@type': 'WebPage',
+        '@id': webpageId,
+        url: articleUrl,
+        name: article.title,
+        ...(article.excerpt ? { description: article.excerpt } : {}),
+        isPartOf: { '@id': `${siteUrl}/#website` },
+        mainEntity: { '@id': articleId },
+        breadcrumb: { '@id': breadcrumbId },
       },
       {
         '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-          { '@type': 'ListItem', position: 2, name: 'Newsroom', item: `${siteUrl}/newsroom` },
-          { '@type': 'ListItem', position: 3, name: article.title, item: `${siteUrl}/articles/${slug}` },
+          { '@type': 'ListItem', position: 2, name: 'Journal', item: `${siteUrl}/journal` },
+          { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl },
         ],
       },
     ],
@@ -146,24 +187,29 @@ export default async function ArticlePage({ params }: Props) {
       maxWidth: 760,
       margin: '0 auto',
       padding: '48px 24px',
-      color: '#75263d'
+      color: '#75263d',
     }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema).replace(/</g, '\\u003c') }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleSchema).replace(/</g, '\\u003c'),
+        }}
+      />
       <nav aria-label="Breadcrumb" style={{ fontSize: 14 }}>
         <Link href="/" style={{ color: 'inherit' }}>Home</Link>
         {' / '}
-        <Link href="/newsroom" style={{ color: 'inherit' }}>Newsroom</Link>
+        <Link href="/journal" style={{ color: 'inherit' }}>Journal</Link>
         {' / '}
         <span aria-current="page">{article.title}</span>
       </nav>
 
-      <p style={{ marginTop: 36 }}>
-        {article.category || 'Journal'}
-      </p>
+      {article.category && (
+        <p style={{ marginTop: 36 }}>{article.category}</p>
+      )}
 
       <h1 style={{
         fontSize: 'clamp(2.5rem, 7vw, 4rem)',
-        lineHeight: 1.1
+        lineHeight: 1.1,
       }}>
         {article.title}
       </h1>
@@ -175,15 +221,33 @@ export default async function ArticlePage({ params }: Props) {
       )}
 
       <p style={{ marginTop: 20, fontSize: 14, lineHeight: 1.7 }}>
-        By {article.author}
-        {datePublished ? ` · Published ${datePublished}` : ' · Publication date not provided'}
-        {dateModified && datePublished && dateModified !== datePublished ? ` · Updated ${dateModified}` : ''}
+        {article.author === 'Dr Asad Frost'
+          ? <Link href="/biography" style={{ color: 'inherit' }}>By {article.author}</Link>
+          : `By ${article.author}`}
+        {datePublished ? ` · Published ${datePublished}` : ''}
+        {dateModified && datePublished && dateModified !== datePublished
+          ? ` · Updated ${dateModified}`
+          : ''}
       </p>
 
-      {article.imageUrl && (
+      {article.tags?.length ? (
+        <ul aria-label="Article tags" style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '8px 16px',
+          listStyle: 'none',
+          margin: '16px 0 0',
+          padding: 0,
+          fontSize: 14,
+        }}>
+          {article.tags.map((tag) => <li key={tag}>{tag}</li>)}
+        </ul>
+      ) : null}
+
+      {imageUrl && (
         <Image
-          src={article.imageUrl}
-          alt={article.imageAlt || article.title}
+          src={imageUrl}
+          alt={article.image?.alt || article.title}
           width={1200}
           height={800}
           sizes="(max-width: 760px) 100vw, 760px"
@@ -191,35 +255,41 @@ export default async function ArticlePage({ params }: Props) {
         />
       )}
 
-      <div style={{ lineHeight: 1.9, fontSize: 18 }}>
-        {article.body?.map((block, index) => {
-          if (block._type !== 'block') return null
+      {article.body?.length ? (
+        <div style={{ lineHeight: 1.9, fontSize: 18 }}>
+          <PortableText value={article.body as never} components={portableTextComponents} />
+        </div>
+      ) : null}
 
-          const text = block.children
-            ?.map((child) => child.text || '')
-            .join('')
-
-          if (block.style === 'h2') {
-            return <h2 key={block._key || index}>{text}</h2>
-          }
-
-          return <p key={block._key || index}>{text}</p>
-        })}
-      </div>
-
-      <p style={{ marginTop: 40 }}>— {article.author}</p>
+      <nav aria-label="Editorial archives" style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 16,
+        marginTop: 40,
+        fontSize: 14,
+      }}>
+        <Link href="/journal" style={{ color: 'inherit' }}>More from the Journal</Link>
+        <Link href="/newsroom" style={{ color: 'inherit' }}>Browse the Newsroom</Link>
+      </nav>
 
       {relatedArticles.length > 0 && (
-        <section aria-labelledby="related-articles-heading" style={{ marginTop: 56, borderTop: '1px solid #e6d9c9', paddingTop: 24 }}>
+        <section aria-labelledby="related-articles-heading" style={{
+          marginTop: 40,
+          borderTop: '1px solid #e6d9c9',
+          paddingTop: 24,
+        }}>
           <h2 id="related-articles-heading" style={{ fontSize: 24 }}>Related articles</h2>
           <ul style={{ display: 'grid', gap: 12, marginTop: 16, paddingLeft: 20 }}>
-            {relatedArticles.map((related) => (
-              <li key={related.slug?.current}>
-                <Link href={`/articles/${related.slug?.current}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
+            {relatedArticles.map((related) => related.slug?.current ? (
+              <li key={related.slug.current}>
+                <Link
+                  href={`/articles/${related.slug.current}`}
+                  style={{ color: 'inherit', textDecoration: 'underline' }}
+                >
                   {related.title}
                 </Link>
               </li>
-            ))}
+            ) : null)}
           </ul>
         </section>
       )}
