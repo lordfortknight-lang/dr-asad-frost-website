@@ -316,22 +316,26 @@ export async function HomeContent() {
           )}
         </section>
 
-        {patientStories.length > 0 && (
-          <section id="patient-work" className="patient-work section-pad">
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">Dental care, thoughtfully shared</span>
-                <h2 className="patient-work-title">
-                  Patient work,
-                  <br />
-                  <em>with permission.</em>
-                </h2>
-              </div>
-              <span className="eyebrow">{patientStories.length} stories</span>
+        <section id="patient-work" className="patient-work section-pad">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Dental care, thoughtfully shared</span>
+              <h2 className="patient-work-title">
+                Patient work,
+                <br />
+                <em>with permission.</em>
+              </h2>
             </div>
+            <span className="eyebrow">{patientStories.length} stories</span>
+          </div>
+          <p className="patient-work-intro">
+            An anonymised record of dental care, treatment journeys and patient experiences. Every story is shared only with consent.
+          </p>
+          {patientStories.length === 0 ? (
             <p className="patient-work-intro">
-              An anonymised record of dental care, treatment journeys and patient experiences. Every story is shared only with consent.
+              Patient stories will appear here once reviewed and published.
             </p>
+          ) : (
             <div className="patient-story-list">
               {patientStories.map((story, index) => (
                 <article className="patient-story" key={story._id}>
@@ -352,8 +356,8 @@ export async function HomeContent() {
                 </article>
               ))}
             </div>
-          </section>
-        )}
+          )}
+        </section>
 
         {achievements.length > 0 && (
           <section id="achievements" className="essays section-pad">
