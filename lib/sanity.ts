@@ -38,64 +38,144 @@ export const contentQuery = `*[
   )
 }`;
 
-export const booksQuery = `*[_type == "book" && !(_id in path("drafts.**"))] | order(title asc) {
+export const publishedArticlesQuery = `*[
+  _type == "article" &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  slug,
+  excerpt,
+  category,
+  tags,
+  "author": coalesce(author, "Dr Asad Frost"),
+  publishedAt,
+  _updatedAt,
+  "image": image {
+    asset->{url},
+    alt,
+    caption
+  },
+  body[]{..., _type == "image" => {"asset": asset->{url}}}
+}`;
+
+export const articleBySlugQuery = `*[
+  _type == "article" &&
+  slug.current == $slug &&
+  !(_id in path("drafts.**"))
+][0] {
+  _id,
+  title,
+  slug,
+  excerpt,
+  category,
+  tags,
+  "author": coalesce(author, "Dr Asad Frost"),
+  publishedAt,
+  _updatedAt,
+  "image": image {
+    asset->{url},
+    alt,
+    caption
+  },
+  body[]{..., _type == "image" => {"asset": asset->{url}}}
+}`;
+
+export const relatedArticlesQuery = `*[
+  _type == "article" &&
+  slug.current != $slug &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**")) &&
+  (
+    (defined($category) && category == $category) ||
+    count(tags[@ in $tags]) > 0
+  )
+] | order(publishedAt desc, _createdAt desc)[0...3] {
+  title,
+  slug
+}`;
+
+export const booksQuery = `*[_type == "book" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
   _id,
   title,
   subtitle,
   author,
   description,
   slug,
-  coverImage {
-    asset->{url}
+  tags,
+  "coverImage": image {
+    asset->{url},
+    alt
   },
   pdf {
     asset->{url, originalFilename, size, mimeType}
   }
 }`;
 
-export const magazinesQuery = `*[_type == "magazineIssue" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
+export const magazinesQuery = `*[
+  _type == "magazineIssue" &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**"))
+] | order(publishedAt desc, _createdAt desc) {
   _id,
   title,
-  subtitle,
+  issueNumber,
   description,
   publishedAt,
+  _updatedAt,
   slug,
-  coverImage {
-    asset->{url}
+  tags,
+  "image": image {
+    asset->{url},
+    alt,
+    caption
   },
   pdf {
     asset->{url, originalFilename, size, mimeType}
   }
 }`;
 
-export const bookBySlugQuery = `*[_type == "book" && slug.current == $slug][0] {
+export const bookBySlugQuery = `*[
+  _type == "book" &&
+  slug.current == $slug &&
+  !(_id in path("drafts.**"))
+][0] {
   _id,
   title,
   subtitle,
   author,
   description,
   slug,
-  coverImage {
-    asset->{url}
+  tags,
+  "coverImage": image {
+    asset->{url},
+    alt
   },
   pdf {
     asset->{url, originalFilename, size, mimeType}
   }
 }`;
 
-export const magazineBySlugQuery = `*[_type == "magazineIssue" && slug.current == $slug][0] {
+export const magazineBySlugQuery = `*[
+  _type == "magazineIssue" &&
+  slug.current == $slug &&
+  !(_id in path("drafts.**"))
+][0] {
   _id,
   title,
-  subtitle,
+  issueNumber,
   description,
   publishedAt,
+  _updatedAt,
   slug,
-  coverImage {
-    asset->{url}
+  tags,
+  "image": image {
+    asset->{url},
+    alt,
+    caption
   },
-  pdf {
-    asset->{url, originalFilename, size, mimeType}
-  }
+  "pdf": pdf.asset->{url, originalFilename, size, mimeType}
 }`;
 
 export const patientStoriesQuery = `*[
@@ -128,6 +208,16 @@ export const clinicalBySlugQuery = `*[_type == "clinicalContent" && slug.current
 }`;
 
 export const clinicalSlugsQuery = `*[_type == "clinicalContent" && consentConfirmed == true && !(_id in path("drafts.**")) && defined(slug.current)] { "slug": slug.current, "updatedAt": coalesce(updatedAt, publishedAt, _updatedAt) }`
+
+export const sitemapContentQuery = `*[
+  _type in ["article", "book", "magazineIssue"] &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**"))
+] {
+  _type,
+  "slug": slug.current,
+  "lastModified": coalesce(_updatedAt, publishedAt)
+}`;
 
 export const achievementsQuery = `*[
   _type == "achievement" &&

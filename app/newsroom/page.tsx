@@ -1,11 +1,22 @@
 import type { Metadata } from 'next'
-import { sanityClient } from '@/lib/sanity'
+import { publishedArticlesQuery, sanityClient } from '@/lib/sanity'
 import { Newsroom } from '@/components/newsroom/newsroom'
 
 export const metadata: Metadata = {
   title: 'Newsroom | Dr Asad Frost',
   description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
   alternates: { canonical: '/newsroom' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/newsroom',
+    title: 'Newsroom | Dr Asad Frost',
+    description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Newsroom | Dr Asad Frost',
+    description: 'A considered editorial archive of essays, observations and ideas by Dr Asad Frost.',
+  },
 }
 
 export const revalidate = 0
@@ -22,23 +33,15 @@ type Article = {
   excerpt?: string
   category?: string
   tags?: string[]
+  author?: string
   publishedAt?: string
+  _updatedAt?: string
   image?: SanityImage
   body?: unknown[]
 }
 
 async function getArticles(): Promise<Article[]> {
-  try {
-    return await sanityClient.fetch(`
-      *[_type == "article" && defined(slug.current) && !(_id in path("drafts.**"))]
-        | order(publishedAt desc, _createdAt desc) {
-          _id, title, slug, excerpt, category, tags, publishedAt,
-          "image": image { asset->{url}, alt }, body
-        }
-    `)
-  } catch {
-    return []
-  }
+  return sanityClient.fetch(publishedArticlesQuery)
 }
 
 export default async function NewsroomPage() {

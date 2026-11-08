@@ -51,13 +51,25 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       { name: 'excerpt', type: 'text', rows: 3 },
       { name: 'category', type: 'string' },
       tags,
+      {
+        name: 'author',
+        title: 'Author',
+        type: 'string',
+        initialValue: 'Dr Asad Frost',
+        validation: (Rule: any) => Rule.required(),
+      },
       image,
       {
         name: 'body',
         type: 'array',
         of: [{ type: 'block' }, { type: 'image' }],
       },
-      { name: 'publishedAt', type: 'datetime' },
+      {
+        name: 'publishedAt',
+        type: 'datetime',
+        title: 'Publication date',
+        validation: (Rule: any) => Rule.required(),
+      },
     ],
   },
   {

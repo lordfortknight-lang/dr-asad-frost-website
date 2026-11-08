@@ -7,6 +7,18 @@ export const metadata: Metadata = {
   title: 'Achievements | Dr Asad Frost',
   description:
     'Academic achievements, accomplishments and milestones of Dr Asad Frost.',
+  alternates: { canonical: '/achievements' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/achievements',
+    title: 'Achievements | Dr Asad Frost',
+    description: 'Academic achievements, accomplishments and milestones of Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Achievements | Dr Asad Frost',
+    description: 'Academic achievements, accomplishments and milestones of Dr Asad Frost.',
+  },
 }
 
 export default function AchievementsPage() {

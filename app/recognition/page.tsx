@@ -7,6 +7,18 @@ export const metadata: Metadata = {
   title: 'Recognition | Dr Asad Frost',
   description:
     'Awards, honours, publications and professional recognition of Dr Asad Frost.',
+  alternates: { canonical: '/recognition' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/recognition',
+    title: 'Recognition | Dr Asad Frost',
+    description: 'Awards, honours, publications and professional recognition of Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Recognition | Dr Asad Frost',
+    description: 'Awards, honours, publications and professional recognition of Dr Asad Frost.',
+  },
 }
 
 export default function RecognitionPage() {

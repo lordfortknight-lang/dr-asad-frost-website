@@ -1,7 +1,25 @@
 
 
+import type { Metadata } from 'next'
 import Link from "next/link";
 import { createClient } from "@sanity/client";
+
+export const metadata: Metadata = {
+  title: 'Books | Dr Asad Frost',
+  description: 'Books and longer works by Dr Asad Frost.',
+  alternates: { canonical: '/books' },
+  openGraph: {
+    type: 'website',
+    url: 'https://www.asadfrost.in/books',
+    title: 'Books | Dr Asad Frost',
+    description: 'Books and longer works by Dr Asad Frost.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Books | Dr Asad Frost',
+    description: 'Books and longer works by Dr Asad Frost.',
+  },
+}
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "n159dle8",
