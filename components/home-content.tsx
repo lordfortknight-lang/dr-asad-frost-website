@@ -316,8 +316,7 @@ export async function HomeContent() {
           )}
         </section>
 
-        {patientStories.length > 0 && (
-          <section id="patient-work" className="patient-work section-pad">
+        <section id="patient-work" className="patient-work section-pad">
             <div className="section-heading">
               <div>
                 <span className="eyebrow">Dental care, thoughtfully shared</span>
@@ -332,7 +331,12 @@ export async function HomeContent() {
             <p className="patient-work-intro">
               An anonymised record of dental care, treatment journeys and patient experiences. Every story is shared only with consent.
             </p>
-            <div className="patient-story-list">
+            {patientStories.length === 0 ? (
+              <p className="patient-work-intro">
+                Patient stories will appear here once reviewed and published.
+              </p>
+            ) : (
+              <div className="patient-story-list">
               {patientStories.map((story, index) => (
                 <article className="patient-story" key={story._id}>
                   <div className="patient-story-meta">
@@ -351,9 +355,9 @@ export async function HomeContent() {
                   {story.details && story.summary && <p className="patient-story-details">{story.details}</p>}
                 </article>
               ))}
-            </div>
+              </div>
+            )}
           </section>
-        )}
 
         {achievements.length > 0 && (
           <section id="achievements" className="essays section-pad">
