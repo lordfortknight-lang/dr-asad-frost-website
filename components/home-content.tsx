@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import {
   ArrowDown,
@@ -11,6 +12,7 @@ import {
   patientStoriesQuery,
 } from '@/lib/sanity'
 import SocialWall from '@/components/SocialWall'
+import { CuriousCompanion } from '@/components/curious-companion'
 
 type Article = {
   _id: string
@@ -149,6 +151,7 @@ export async function HomeContent() {
             </Link>
           </div>
 
+          <CuriousCompanion />
         </section>
 
         <section id="explore" className="explore section-pad">
