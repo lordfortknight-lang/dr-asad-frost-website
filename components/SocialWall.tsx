@@ -46,10 +46,10 @@ function TweetAvatar({ tweet }: { tweet: Tweet }) {
   const [imageFailed, setImageFailed] = useState(false)
 
   if (tweet.avatarUrl && !imageFailed) {
-    return <img className="social-avatar" src={tweet.avatarUrl} alt="" onError={() => setImageFailed(true)} />
+    return <img className="social-avatar" src={tweet.avatarUrl} alt="" onError={() => setImageFailed(true)} style={{ width: 38, height: 38, flex: '0 0 38px', borderRadius: '50%', objectFit: 'cover' }} />
   }
 
-  return <span className="social-avatar" aria-hidden="true">{initials(tweet.name)}</span>
+  return <span className="social-avatar" aria-hidden="true" style={{ width: 38, height: 38, flex: '0 0 38px', borderRadius: '50%', display: 'grid', placeItems: 'center', color: 'white', background: 'linear-gradient(135deg, #762b3b, #b79a61)' }}>{initials(tweet.name)}</span>
 }
 
 function TweetText({ text }: { text: string }) {
@@ -82,9 +82,9 @@ export default function SocialWall() {
   const currentX = useRef([0, 0, 0])
   const frame = useRef<number | null>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [offsets, setOffsets] = useState([0, 0, 0])
+  const [offsets, setOffsets] = useState([0, 0])
   const [quotesVisible, setQuotesVisible] = useState(false)
-  const rows = useMemo(() => [TWEETS.slice(0, 3), TWEETS.slice(3, 6), TWEETS.slice(6)], [])
+  const rows = useMemo(() => [TWEETS.slice(0, 5), TWEETS.slice(3, 8)], [])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -115,7 +115,7 @@ export default function SocialWall() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const update = () => {
       const scroll = window.scrollY
-      const speeds = [0.16, -0.11, 0.08]
+      const speeds = [0.35, -0.6]
       targetX.current = speeds.map((speed) => ((scroll * speed) % 260) - 130)
       if (reducedMotion) {
         currentX.current = targetX.current
@@ -182,14 +182,10 @@ export default function SocialWall() {
         .social-wall-viewport { position: relative; width: 100%; mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
         .social-wall-rows { display: grid; gap: 8px; width: max-content; padding: 10px 0 28px; }
         .social-wall-row { display: flex; gap: 16px; will-change: transform; position: relative; }
-        .social-wall-row:nth-child(2), .social-wall-row:nth-child(3) { margin-top: -4px; }
-        .social-wall-row:nth-child(2) { z-index: 2; }
-        .social-wall-row:nth-child(3) { z-index: 3; }
+        .social-wall-row:nth-child(2) { margin-top: -4px; z-index: 2; }
         .social-card { width: clamp(290px, 34vw, 390px); min-height: 132px; padding: 14px 16px; background: white; border: 0; border-radius: 10px; box-shadow: 0 12px 32px rgba(0,0,0,.10); }
         .social-card-header { display: flex; align-items: center; gap: 10px; }
-        .social-avatar { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border: 0; border-radius: 50%; object-fit: cover; color: white; background: linear-gradient(135deg, #762b3b, #d5bca2); font: 700 10px Arial, sans-serif; letter-spacing: .04em; }
-        .social-card:nth-child(3n + 1) .social-avatar { background: linear-gradient(135deg, #6d8f9a, #c9d9d5); }
-        .social-card:nth-child(3n + 2) .social-avatar { background: linear-gradient(135deg, #b79a61, #e7c9b2); }
+        .social-avatar { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border: 0; border-radius: 50%; object-fit: cover; color: white; background: linear-gradient(135deg, #762b3b, #b79a61); font: 700 11px Arial, sans-serif; letter-spacing: .04em; }
         .social-card-identity { min-width: 0; }
         .social-card strong, .social-card small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .social-card strong { font: 700 12px Arial, sans-serif; }
