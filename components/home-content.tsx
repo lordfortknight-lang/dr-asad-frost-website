@@ -413,7 +413,7 @@ export async function HomeContent() {
           </section>
         )}
 
-        <SocialWall />
+        {/* <SocialWall /> */}
 
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
