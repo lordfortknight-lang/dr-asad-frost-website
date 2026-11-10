@@ -30,10 +30,7 @@ const TWEETS: Tweet[] = [
   { name: 'Dr Asad Frost', handle: '@asadfrost', date: '21 Nov 2023', text: 'The work is in noticing what others might pass by. @asadfrost' },
 ]
 
-const QUOTES: Quote[] = [
-  { text: 'Placeholder testimonial quote goes here, ready for your own words.', name: 'Placeholder Name' },
-  { text: 'Placeholder testimonial quote goes here, ready for your own words.', name: 'Placeholder Name' },
-]
+const QUOTES: Quote[] = []
 
 const initials = (name: string) =>
   name
@@ -163,14 +160,16 @@ export default function SocialWall() {
         </div>
       </div>
 
-      <div data-social-quotes className={`social-quotes ${quotesVisible ? 'is-visible' : ''}`}>
-        {QUOTES.map((quote, index) => (
-          <figure key={`${quote.name}-${index}`}>
-            <blockquote className={lora.className}>“{quote.text}”</blockquote>
-            <figcaption>{quote.name}</figcaption>
-          </figure>
-        ))}
-      </div>
+      {QUOTES.length > 0 && (
+        <div data-social-quotes className={`social-quotes ${quotesVisible ? 'is-visible' : ''}`}>
+          {QUOTES.map((quote, index) => (
+            <figure key={`${quote.name}-${index}`}>
+              <blockquote className={lora.className}>“{quote.text}”</blockquote>
+              <figcaption>{quote.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
 
       <style jsx>{`
         .social-wall { background: #f6f5ec; color: #241c1b; padding: clamp(70px, 10vw, 130px) 0 clamp(80px, 11vw, 145px); overflow: hidden; }
