@@ -10,6 +10,7 @@ import {
   achievementsQuery,
   patientStoriesQuery,
 } from '@/lib/sanity'
+import SocialWall from '@/components/SocialWall'
 
 type Article = {
   _id: string
@@ -411,6 +412,8 @@ export async function HomeContent() {
             </div>
           </section>
         )}
+
+        <SocialWall />
 
         <section className="statement section-pad">
           <div className="statement-mark">“</div>
